@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="navbar.css" />
+    <link rel="stylesheet" href="index.css" />
+    <title>Stacks of Wax</title>
+  </head>
+  <body>
+    <%- include("./partials/navbar") %>
+
+    <div class="flex-container">
+      <main class="main">
+        <img src="https://images.unsplash.com/photo-1662354333661-1c18107484b9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="" class="banner-image">
+        <header class="page-header">
+          <% if (user) { %>
+          <h2 class="welcome-header"><%= user.firstName %>'s Dashboard</h2>
+          <hr/>
+          <% } else { %>
+          <h2 class="welcome-header">What is Stacks of Wax?</h2>
+          <p class="header-text">
+            Whether you're a musician looking to showcase your talents or a
+            music lover in search of your next favorite track, Stacks Of Wax is
+            the perfect pplatform for you to connect with like-minded individuals
+            and explore the world of music. With our user-friendly interface and
+            vast collection of songs, you can easily create collections, share
+            your favorite tracks with friends, and discover new music that
+            speaks to your soul. So sit back, relax, and let the music take you
+            on a journey.
+          </p>
+          <hr/>
+          <h3>So how does it work?</h3>
+          <p class="header-text">
+            Stacks Of Wax is an open community! That means <b>anybody</b> can
+            browse our catalogue of vinyls, artists, and check out our member's
+            profiles, no membership required!
+          </p>
+          <hr/>
+          <h3>How can I share my records with the world?</h3>
+          <p class="header-text">
+            If you want to contribute to the Stacks Of Wax community, you'll
+            need to <a href="/register">set up a FREE account!</a> Creating an
+            account is super fast and easy, and once you're registered you'll
+            have full access to all of the features on the site!
+          </p>
+          <hr/>
+          <h3>Members can:</h3>
+          <ul>
+            <li>Customise their own profile</li>
+            <li>Add records to our catalogue</li>
+            <li>Create collections to share with the world</li>
+            <li>Like, comment and review other member's collections</li>
+          </ul>
+          <% } %>
+          <div class="card-grid">
+            <% if (user) { %>
+              <div class="card">
+            <% } else { %>
+                <div class="card blocked">
+              <% } %>
+              <div class="card-header">
+                <img
+                  class="card-image"
+                  src="https://images.unsplash.com/photo-1668494833871-50d2874c9189?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1166&q=80"
+                  alt=""
+                />
+              </div>
+              <div class="card-body">
+                Found a hidden gem? Share it with the world!
+              </div>
+              <div class="card-footer">
+                <% if (user) { %>
+                  <button class="btn">Add Vinyl</button>
+                <% } else { %>
+                  <button class="btn">Add Vinyl (Members Only)</button>
+                  <% } %>
+              </div>
+            </div>
+            <% if (user) { %>
+              <div class="card">
+            <% } else { %>
+                <div class="card blocked">
+              <% } %>
+              <div class="card-header">
+                <img
+                  class="card-image"
+                  src="https://images.unsplash.com/photo-1488841714725-bb4c32d1ac94?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1130&q=80"
+                  alt=""
+                />
+              </div>
+              <div class="card-body">
+                  Mix and Match your favourite records to create something unique!   
+              </div>
+              <div class="card-footer">
+                <% if (user) { %>
+                  <button class="btn">Create a Collection</button>
+                <% } else { %>
+                  <button class="btn">Create Collection (Members Only)</button>
+                  <% } %>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <img
+                  class="card-image"
+                  src="https://images.unsplash.com/photo-1607749111659-e1c8e05f5f24?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZnJpZW5kc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+                  alt=""
+                />
+              </div>
+              <div class="card-body">
+                Check out our member profiles and see what people are sharing!
+              </div>
+              <div class="card-footer">
+                <button class="btn">Member Profiles</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <img
+                  class="card-image"
+                  src="https://images.unsplash.com/photo-1605722243979-fe0be8158232?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                  alt=""
+                />
+              </div>
+              <div class="card-body">
+                From Bob Marley to Black Sabbath, you'll find them all here!
+              </div>
+              <div class="card-footer">
+                <button class="btn">Browse Artists</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <img
+                  class="card-image"
+                  src="https://images.unsplash.com/photo-1605055510925-4c9626126167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"
+                  alt=""
+                />
+              </div>
+              <div class="card-body">
+                Our members have curated collections to suit any taste, check them
+                out here!
+              </div>
+              <div class="card-footer">
+                <button class="btn">Browse Collections</button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <img
+                  class="card-image"
+                  src="https://images.unsplash.com/photo-1599663253408-ddd8dadac635?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80"
+                  alt=""
+                />
+              </div>
+              <div class="card-body">
+                Whether its hip-hop or heavy metal,
+                we guarantee you'll find it here!
+              </div>
+              <div class="card-footer">
+                <button class="btn">Browse Genres</button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+        </header>
+
+        
+  </body>
+  <script src="navbar.js"></script>
+</html>

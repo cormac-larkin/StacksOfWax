@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="globals.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="register.css">
+    <title>Register</title>
+  </head>
+  <body>
+    <%- include("./partials/navbar") %>
+    <div class="container">
+        <header class="form-header">
+          <h1 class="main-heading">Create an Account</h1>
+          <h4 class="sub-heading">
+            Become a member to add your own collections!
+          </h4>
+
+          <% if (locals.messages.error) { %>
+            <h3 class="error-message"><%= locals.messages.error %></h3>
+          <% } %>
+          
+        </header>
+        <form class="form" method="POST", action="/register">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="you@example.com"
+            required
+          ></input>
+          <label for="first-name">First Name</label>
+          <input
+            type="text"
+            id="first-name"
+            name="firstName"
+            placeholder="Your first name"
+            required
+          ></input>
+          <label for="last-name">Last Name</label>
+          <input
+            type="text"
+            id="last-name"
+            name="lastName"
+            placeholder="Your last name"
+            required
+          ></input>
+          <label for="date-of-birth">Date of Birth</label>
+          <input
+            type="date"
+            id="date-of-birth"
+            name="dateOfBirth"
+            required
+          ></input>
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Must be at least 8 characters long"
+            minlength="8"
+          ></input>
+          <label for="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            placeholder="Confirm your password"
+            minlength="8"
+          ></input>
+          <p id="warning-message">Passwords must match</p>
+          <button type="submit" id="submit">Register</button>
+        </form>
+        <a href="/login">Already have an account? Log In here!</a>
+        <br/>
+      </div>
+  </body>
+  <script src="register.js"></script>
+  <script src="navbar.js"></script>
+</html>
