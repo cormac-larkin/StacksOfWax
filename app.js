@@ -11,7 +11,7 @@ const ensureNotAuthenticated = require("./middleware/ensureNotAuthenticated");
 // Configure Express
 const app = express();
 app.set("view engine", "ejs");
-app.use(express.static("public/css"));
+app.use(express.static('public/css'));
 app.use(express.static("public/images"));
 app.use(express.static("public/scripts"));
 app.use(express.urlencoded({ extended: false }));
@@ -118,10 +118,69 @@ app.post("/register", async (req, res) => {
 });
 });
 
+app.get("/vinyls", (req, res) => {
+
+  db.query("SELECT * FROM vinyl", (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.render("vinyls", { user: req.session.user, vinyls: result })
+  });
+});
+
+app.get("/vinyls/add", (req, res) => {
+  res.render("add_vinyl", { user: req.session.user });
+});
+
+app.post("/vinyls/add", (req, res) => {
+
+  console.log(req.body);
+  // Get values from req.body
+  const {vinylName, genre, subGenre, artist, year, albumArt} = req.body;
+
+
+  // Insert Artist
+  db.query("INSERT INTO artist (name) VALUES (?)", [artist], (err, result) => {
+    if (err) throw err;
+    const artistId = result.insertId;
+
+    // Insert Vinyl and Link to Artist
+    db.query("INSERT INTO vinyl (name, year, image_url, artist_id) VALUES (?, ?, ?, ?)", [vinylName, year, albumArt, artistId], (err, result) => {
+      if (err) throw err;
+      const vinylId = result.insertId;
+
+      // Insert Genres and link to Vinyl (using vinyl_genre table)
+      db.query("INSERT INTO genre (name) VALUES (?)", [genre], (err, result) => {
+        if (err) throw err;
+        const genreId = result.insertId;
+
+        db.query("INSERT INTO vinyl_genre (vinyl_id, genre_id) VALUES (?, ?)", [vinylId, genreId], (err, result) => {
+          if (err) throw err;
+          
+          db.query("INSERT INTO genre (name) VALUES (?)", [subGenre], (err, result) => {
+            if (err) throw err;
+            const subGenreId = result.insertId;
+
+            db.query("INSERT INTO vinyl_genre (vinyl_id, genre_id) VALUES (?, ?)", [vinylId, subGenreId], (err, result) => {
+              if (err) throw err;
+
+              res.render("add_vinyl", { user: req.session.user })
+            })
+          })
+        })
+      });
+    });
+
+    
+  });
+  
+
+  
+});
+
 app.get("/logout", ensureAuthenticated, (req, res) => {
   req.session.destroy();
   res.redirect("/login");
-})
+});
 
 app.listen(3000, () => {
   console.log("*** Server listening on http://localhost:3000/ ***");

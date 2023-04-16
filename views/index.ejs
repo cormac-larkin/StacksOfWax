@@ -24,7 +24,7 @@
           <p class="header-text">
             Whether you're a musician looking to showcase your talents or a
             music lover in search of your next favorite track, Stacks Of Wax is
-            the perfect pplatform for you to connect with like-minded individuals
+            the perfect platform for you to connect with like-minded individuals
             and explore the world of music. With our user-friendly interface and
             vast collection of songs, you can easily create collections, share
             your favorite tracks with friends, and discover new music that
@@ -57,9 +57,9 @@
           <% } %>
           <div class="card-grid">
             <% if (user) { %>
-              <div class="card">
+              <article class="card">
             <% } else { %>
-                <div class="card blocked">
+                <article class="card blocked">
               <% } %>
               <div class="card-header">
                 <img
@@ -78,11 +78,11 @@
                   <button class="btn">Add Vinyl (Members Only)</button>
                   <% } %>
               </div>
-            </div>
+            </article>
             <% if (user) { %>
-              <div class="card">
+              <article class="card">
             <% } else { %>
-                <div class="card blocked">
+                <article class="card blocked">
               <% } %>
               <div class="card-header">
                 <img
@@ -101,8 +101,8 @@
                   <button class="btn">Create Collection (Members Only)</button>
                   <% } %>
               </div>
-            </div>
-            <div class="card">
+              </article>
+            <article class="card">
               <div class="card-header">
                 <img
                   class="card-image"
@@ -116,8 +116,8 @@
               <div class="card-footer">
                 <button class="btn">Member Profiles</button>
               </div>
-            </div>
-            <div class="card">
+            </article>
+            <article class="card">
               <div class="card-header">
                 <img
                   class="card-image"
@@ -131,8 +131,8 @@
               <div class="card-footer">
                 <button class="btn">Browse Artists</button>
               </div>
-            </div>
-            <div class="card">
+            </article>
+            <article class="card">
               <div class="card-header">
                 <img
                   class="card-image"
@@ -147,8 +147,8 @@
               <div class="card-footer">
                 <button class="btn">Browse Collections</button>
               </div>
-            </div>
-            <div class="card">
+            </article>
+            <article class="card">
               <div class="card-header">
                 <img
                   class="card-image"
@@ -163,13 +163,11 @@
               <div class="card-footer">
                 <button class="btn">Browse Genres</button>
               </div>
-            </div>
+            </article>
           </div>
-        </main>
-      </div>
         </header>
-
-        
+      </main>
+    </div>
   </body>
   <script src="navbar.js"></script>
 </html>
