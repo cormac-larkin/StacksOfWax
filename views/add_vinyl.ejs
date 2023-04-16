@@ -28,32 +28,24 @@
           required
         />
         <label for="artist">Artist</label>
-        <input
-          type="text"
-          id="artist"
-          name="artist"
-          min="1"
-          max="20"
-          required
-        />
+        <select id="artist" name="artist">
+            <% for( let i = 0; i < artists.length; i++ ) { %>
+                <option value='<%= artists[i].name %>'><%= artists[i].name %></option>
+            <% } %>
+        </select>
+
         <label for="genre">Genre</label>
-        <input
-          type="text"
-          id="genre"
-          name="genre"
-          minlength="1"
-          maxlength="50"
-          required
-        />
+        <select id="genre" name="genre">
+            <% for( let i = 0; i < genres.length; i++ ) { %>
+                <option value=<%= genres[i].name %>><%= genres[i].name %></option>
+            <% } %>
+        </select>
         <label for="subgenre">Subgenre</label>
-        <input
-          type="text"
-          id="subgenre"
-          name="subGenre"
-          minlength="1"
-          maxlength="50"
-          required
-        />
+        <select id="sub-genre" name="subGenre" size="1">
+            <% for( let i = 0; i < genres.length; i++ ) { %>
+                <option value='<%= genres[i].name %>'><%= genres[i].name %></option>
+            <% } %>
+        </select>
         <label for="year">Release Year</label>
         <input
           type="number"
@@ -64,21 +56,10 @@
           required
         />
         <label for="art">Album Art (URL)</label>
-        <input
-          type="text"
-          id="art"
-          name="albumArt"
-          minlength=""
-        />
+        <input type="text" id="art" name="albumArt" minlength="" />
         <label for="track-count">Number of Tracks</label>
-        <input
-          type="number"
-          id="track-count"
-          min="1"
-          max="20"
-          required
-        />
-        
+        <input type="number" id="track-count" min="1" max="20" required />
+
         <button type="button" id="nextBtn">Next</button>
         <button type="submit" id="submitBtn">Add Vinyl</button>
       </form>

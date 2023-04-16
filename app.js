@@ -27,12 +27,13 @@ app.use(flash());
 
 // Connect to database
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "stacks_of_wax",
-  port: "3306",
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "stacks_of_wax",
+    port: "3306",
 });
+
 db.connect((err) => {
   if (err) throw err;
   console.log("*** Database connected successfully ***");
@@ -122,59 +123,82 @@ app.get("/vinyls", (req, res) => {
 
   db.query("SELECT * FROM vinyl", (err, result) => {
     if (err) throw err;
-    console.log(result);
     res.render("vinyls", { user: req.session.user, vinyls: result })
   });
 });
 
 app.get("/vinyls/add", (req, res) => {
-  res.render("add_vinyl", { user: req.session.user });
+
+  db.query("SELECT name FROM artist ORDER BY name ASC", (err, result) => {
+    if (err) throw err;
+    const artists = result;
+
+    db.query("SELECT name FROM genre ORDER BY name ASC", (err, result) => {
+      if (err) throw err;
+      const genres = result;
+      res.render("add_vinyl", { user: req.session.user, artists, genres });
+    })
+    
+  })
+
+  
 });
 
 app.post("/vinyls/add", (req, res) => {
 
-  console.log(req.body);
   // Get values from req.body
   const {vinylName, genre, subGenre, artist, year, albumArt} = req.body;
+  console.log(req.body);
+  
+  // Get the track names
+  let trackNames = [];
+  for (key in req.body) {
+    if (key.startsWith("track")) {
+      trackNames.push(req.body[key]);
+    }
+  }
 
-
-  // Insert Artist
-  db.query("INSERT INTO artist (name) VALUES (?)", [artist], (err, result) => {
+  // Find Artist ID
+  db.query("SELECT artist_id FROM artist WHERE name = (?)", [artist], (err, result) => {
     if (err) throw err;
-    const artistId = result.insertId;
+    console.log(result);
+    const artistId = result[0].artist_id;
 
     // Insert Vinyl and Link to Artist
     db.query("INSERT INTO vinyl (name, year, image_url, artist_id) VALUES (?, ?, ?, ?)", [vinylName, year, albumArt, artistId], (err, result) => {
       if (err) throw err;
       const vinylId = result.insertId;
 
-      // Insert Genres and link to Vinyl (using vinyl_genre table)
-      db.query("INSERT INTO genre (name) VALUES (?)", [genre], (err, result) => {
+      // Get the ID of the Primary Genre and link it to the Vinyl (using vinyl_genre table)
+      db.query("SELECT genre_id from genre WHERE name = (?)", [genre], (err, result) => {
         if (err) throw err;
-        const genreId = result.insertId;
+        const genreId = result[0].genre_id;
 
         db.query("INSERT INTO vinyl_genre (vinyl_id, genre_id) VALUES (?, ?)", [vinylId, genreId], (err, result) => {
           if (err) throw err;
           
-          db.query("INSERT INTO genre (name) VALUES (?)", [subGenre], (err, result) => {
+          // Get the ID of the Subgenre and link it to the Vinyl (using vinyl_genre table)
+          db.query("SELECT genre_id from genre WHERE name = (?)", [subGenre], (err, result) => {
             if (err) throw err;
-            const subGenreId = result.insertId;
+            const subGenreId = result[0].genre_id;
 
             db.query("INSERT INTO vinyl_genre (vinyl_id, genre_id) VALUES (?, ?)", [vinylId, subGenreId], (err, result) => {
               if (err) throw err;
 
-              res.render("add_vinyl", { user: req.session.user })
-            })
-          })
-        })
+              // Insert all the tracks and link to Vinyl
+              trackNames.forEach((track) => {
+                db.query("INSERT INTO track (name, vinyl_id) VALUES (?, ?)", [track, vinylId], (err, result) => {
+                    if (err) throw err;
+                });
+              });
+              res.redirect("/vinyls");
+              
+            });
+          });
+        });
       });
     });
-
-    
-  });
-  
-
-  
+  });  
 });
 
 app.get("/logout", ensureAuthenticated, (req, res) => {

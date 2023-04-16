@@ -41,7 +41,7 @@ label {
     padding-top: 1rem;
 }
 
-input {
+input, select {
     height: 2.25rem;
     border: 1px solid grey;
     border-radius: 5px;
