@@ -1,3 +1,7 @@
+/**
+ * This file exports a connection to the MySQL database.
+ */
+
 const mysql = require("mysql");
 
 const db = mysql.createConnection({

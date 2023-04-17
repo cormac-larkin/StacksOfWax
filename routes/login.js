@@ -1,13 +1,15 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
 const db = require("../database/connection");
+const ensureNotAuthenticated = require("../middleware/ensureNotAuthenticated");
 
 const router = express.Router();
 
-router.get("/login",  ensureNotAuthenticated, (req, res) => {
+router.get("/",  ensureNotAuthenticated, (req, res) => {
   res.render("login", { user: req.session.user });
 });
 
-router.post("/login", (req, res) => {
+router.post("/", (req, res) => {
   // Parse the request body
   const {email, password} = req.body;
 
