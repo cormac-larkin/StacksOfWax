@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="navbar.css" />
+    <title><%= collection.name %></title>
+</head>
+<body>
+    <%- include("./partials/navbar") %>
+
+    <% vinyls.forEach(vinyl => { %>
+        <a class="card">
+            <div class="card-header">
+              <img
+                class="card-image"
+                src=<%= vinyl.image_url || "https://plus.unsplash.com/premium_photo-1677589330346-7e71871d2ce5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80" %>
+                alt=""
+              />
+            </div>
+            <div class="card-body">
+              <h3 class="vinyl-name"><%= vinyl.vinyl_name %></h3>
+              <h4 class="vinyl-artist"><%= vinyl.artist %></h4>
+              <h4 class="vinyl-year"><%= vinyl.year %> | <%= vinyl.genre %></h4>
+            </div>
+            <div class="card-footer">
+            </div>
+          </a>
+    <% }) %>
+</body>
+<script src="navbar.js"></script>
+</html>

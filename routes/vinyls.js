@@ -1,9 +1,10 @@
 const express = require("express");
 const db = require("../database/connection");
+const ensureAuthenticated = require("../middleware/ensureAuthenticated");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/browse", (req, res) => {
   db.query(
     "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id GROUP BY vinyl.name",
     (err, result) => {
@@ -13,7 +14,7 @@ router.get("/", (req, res) => {
   );
 });
 
-router.get("/add", (req, res) => {
+router.get("/add", ensureAuthenticated, (req, res) => {
   db.query("SELECT name FROM artist ORDER BY name ASC", (err, result) => {
     if (err) throw err;
     const artists = result;
@@ -26,7 +27,7 @@ router.get("/add", (req, res) => {
   });
 });
 
-router.post("/add", (req, res) => {
+router.post("/add", ensureAuthenticated, (req, res) => {
   // Get vinyl info from req.body
   const { vinylName, genre, subGenre, artist, year, albumArt } = req.body;
   console.log(req.body);
@@ -94,7 +95,7 @@ router.post("/add", (req, res) => {
                               }
                             );
                           });
-                          res.redirect("/vinyls");
+                          res.redirect("/vinyls/browse");
                         }
                       );
                     }

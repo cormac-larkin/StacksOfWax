@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="globals.css" />
-    <link rel="stylesheet" href="navbar.css" />
-    <link rel="stylesheet" href="vinyls.css" />
+    <link rel="stylesheet" href="../globals.css" />
+    <link rel="stylesheet" href="../navbar.css" />
+    <link rel="stylesheet" href="../vinyls.css" />
     <title>Vinyl Catalogue</title>
   </head>
   <body>
@@ -15,12 +15,16 @@
     <div class="flex-container">
       <main class="main">
         <img
-          src="https://images.unsplash.com/photo-1662354333661-1c18107484b9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+          src="https://images.unsplash.com/photo-1530288782965-fbad40327074?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
           alt=""
           class="banner-image"
         />
         <header class="page-header">
+          <hr>
           <h2 class="welcome-header">Vinyl Catalogue</h2>
+          <br>
+          <p class="header-text">Click on a vinyl to see the track-list and more information!</p>
+          <hr>
           <div class="card-grid">
 
             <% for( let i = 0; i < vinyls.length; i++ ) { %>
@@ -49,5 +53,5 @@
       </main>
     </div>
   </body>
-  <script src="navbar.js"></script>
+  <script src="../navbar.js"></script>
 </html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../globals.css" />
+    <link rel="stylesheet" href="../navbar.css" />
+    <link rel="stylesheet" href="../browse_collections.css" />
+    <title>Browse Collections</title>
+  </head>
+  <body>
+    <%- include("./partials/navbar") %>
+
+    <div class="flex-container">
+      <main class="main">
+        <img
+          src="https://images.unsplash.com/photo-1470405696369-2ab23def9f8d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+          alt=""
+          class="banner-image"
+        />
+        <header class="page-header">
+          <hr />
+          <h2 class="welcome-header">Browse Collections</h2>
+          <br />
+          <p class="header-text">Click on a collection for more information!</p>
+          <hr />
+          <div class="card-grid">
+            <% collections.forEach(collection => { %>
+
+            <a class="card" href="/collections?id=<%= collection.collection_id %>">
+              <div class="card-header">
+                <img
+                  class="card-image"
+                  src="https://plus.unsplash.com/premium_photo-1677589330346-7e71871d2ce5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"
+                  alt=""
+                />
+              </div>
+              <div class="card-body">
+                <h3 class="vinyl-name"><%= collection.collection_name %></h3>
+                <h4 class="vinyl-artist">
+                  <%= collection.first_name %> <%= collection.last_name %>
+                </h4>
+              </div>
+              <div class="card-footer"></div>
+            </a>
+
+            <% }) %>
+          </div>
+        </header>
+      </main>
+    </div>
+  </body>
+  <script src="../navbar.js"></script>
+</html>
