@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../globals.css" />
+    <link rel="stylesheet" href="../navbar.css" />
+    <link rel="stylesheet" href="../create_collection.css" />
+    <title>Create Collection</title>
+  </head>
+  <body>
+    <%- include("./partials/navbar") %>
+
+    <div class="flex-container">
+      <main class="main">
+        <img
+          src="https://images.unsplash.com/photo-1662354333661-1c18107484b9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+          alt=""
+          class="banner-image"
+        />
+        <header class="page-header">
+          <h2 class="welcome-header">Create A New Collection</h2>
+          <br>
+          <h3>
+            Step 1
+          </h3>
+          <p class="instruction">Click on Vinyls to add/remove them from your collection</p>
+          <h3>
+            Step 2
+          </h3>
+          <p class="instruction">Click the 'Done' button on the right-hand side to save your new collection!</p>
+          <p class="reminder">Remember, you must choose at least 3 Vinyls for a collection before saving it!</p>
+          <hr>
+          <form method="POST" action="/collections/create" class="card-grid">
+              <% for( let i = 0; i < vinyls.length; i++ ) { %>
+
+              <article class="card">
+                <div class="card-header">
+                  <img class="card-image" src=<%= vinyls[i].image_url ||
+                  "https://plus.unsplash.com/premium_photo-1677589330346-7e71871d2ce5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"
+                  %> alt="" />
+                </div>
+                <div class="card-body">
+                  <h3 class="vinyl-name"><%= vinyls[i].name %></h3>
+                  <h4 class="vinyl-artist"><%= vinyls[i].artist %></h4>
+                  <h4 class="vinyl-year">
+                    <%= vinyls[i].year %> | <%= vinyls[i].genre %>
+                  </h4>
+                  <input
+                    class="check-box"
+                    type="checkbox"
+                    name="vinyl<%= vinyls[i].vinyl_id %>"
+                    value="<%= vinyls[i].vinyl_id %>"
+                    hidden
+                  />
+                </div>
+                <div class="card-footer"></div>
+              </article>
+
+              <% } %>
+              <button class="done-button" type="submit">Done</button>
+            </form>
+        </header>
+      </main>
+    </div>
+  </body>
+  <script src="../navbar.js"></script>
+  <script src="../createCollection.js"></script>
+</html>

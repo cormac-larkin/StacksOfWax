@@ -34,7 +34,7 @@ router.post("/", (req, res) => {
       if (err) throw err;
     });
     req.session.isAuth = true;
-    req.session.user = {firstName: result[0].first_name, lastName: result[0].last_name, email: result[0].email}
+    req.session.user = {id: result[0].user_id ,firstName: result[0].first_name, lastName: result[0].last_name, email: result[0].email}
     return res.redirect("/home"); // Redirect to '/home' with welcome message
    } else {
     req.flash("error", "Invalid username or password")

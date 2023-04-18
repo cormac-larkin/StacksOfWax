@@ -9,6 +9,7 @@ const registerRoutes = require("./routes/register");
 const vinylRoutes = require("./routes/vinyls");
 const homeRoutes = require("./routes/home");
 const logoutRoutes = require("./routes/logout");
+const collectionRoutes = require("./routes/collections");
 
 // Configure Express
 const app = express();
@@ -34,6 +35,7 @@ app.use("/register", registerRoutes);
 app.use("/login", loginRoutes);
 app.use("/logout", logoutRoutes);
 app.use("/vinyls", vinylRoutes);
+app.use("/collections", collectionRoutes);
 
 app.get("/", ensureNotAuthenticated, (req, res) => {
   res.render("landing");
