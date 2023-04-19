@@ -38,20 +38,26 @@
             </div>
 
             <div class="right-info">
+
+                <% if (user && alreadyLiked) { %>
+                    <form method="POST" action="/likes/delete" class="like-form">
+                        <input type="hidden" name="collectionId" value="<%= collection.collection_id %>">
+                        <button class="like-btn already-liked"type="submit">UN-LIKE | &#128078;</button>   
+                    </form>
+                <% } else if (user) { %>
                     <form method="POST" action="/likes/add" class="like-form">
                         <input type="hidden" name="collectionId" value="<%= collection.collection_id %>">
-                        <button 
-                        <% if (user) { %>
-                            class="like-btn"
-                        <% } else { %>
-                            class="like-btn disabled"
-                            disabled
-                        <% } %>
-                         type="submit">LIKE | &#128077;</button>
-                        <% if (!user) { %>
-                         <a href="/login"><u><b>Log In</b></u> to Like Collections</a>
-                        <% } %>
+                        <button class="like-btn" type="submit">LIKE | &#128077;</button>   
                     </form>
+                <% } else if (!user) { %>
+                    <form method="POST" action="#" class="like-form">
+                        <input type="hidden" name="collectionId" value="<%= collection.collection_id %>">
+                        <button class="like-btn disabled" disabled type="submit">LIKE | &#128077;</button> 
+                        <a href="/login"><u><b>Log In</b></u> to Like Collections</a>  
+                    </form>
+                <% } %>
+
+                    
                 <% if (likes.length == 1) { %>
                     <h4 class="header-text"><%= likes.length %> Like</h4>
                 <% } else {%>
@@ -93,41 +99,42 @@
           <hr />
           <hr />
           <section class="create-review">
-            <form class="review-form" method="POST" action="/reviews/add">
-                <input hidden name="collectionId" value="<%= collection.collection_id %>">
-                <% if (!user) { %>
-                    <p class="warning">Only members can leave reviews!</p>
-                    <div class="link-container">
-                        
-                        <a href="/login" class="btn link">Log In</a><a href="/register" class="btn link">Sign Up</a>
-                    </div>
-                 
-                <% } %>
-                <label for="title">Title</label>
-                <input type="text" <% if (!user) { %>
-                 readonly class="review-title-input disabled"
-                <% } %> id="title" name="title"
-                <% if (user) { %>
-                    placeholder="Sum it up in a few words"
-                <% } %>
-           maxlength="250" required>
-                <label for="review-content">Review</label>
-                <textarea name="reviewContent" id="review-content"
-                <% if (!user) { %>
-                    readonly class="disabled"
-                   <% } %>  cols="30" rows="10"
-                   <% if (user) { %>
-                    placeholder="Don't hold back!"
-                   <% } %>  required></textarea>
-                <% if (user) { %>
+            <% if (user && alreadyReviewed) { %>
+                <form class="review-form" method="POST" action="#">
+                    <input hidden name="collectionId" value="<%= collection.collection_id %>">
+                    <p class="warning">You've already reviewed this collection!</p>
+                    <label for="title">Title</label>
+                    <input type="text" readonly class="review-title-input disabled" id="title" name="title" maxlength="250" required>
+                    <label for="review-content">Review</label>
+                    <textarea name="reviewContent" id="review-content" readonly class="disabled" cols="30" rows="10" required></textarea>
+                    <button class="btn disabled" type="submit" disabled>Submit Review</button>
+                </form> 
+            <% } else if (user) {%>
+                <form class="review-form" method="POST" action="/reviews/add">
+                    <input hidden name="collectionId" value="<%= collection.collection_id %>">
+                    <label for="title">Title</label>
+                    <input type="text" class="review-title-input" id="title" name="title" maxlength="250" required>
+                    <label for="review-content">Review</label>
+                    <textarea name="reviewContent" id="review-content" cols="30" rows="10" required></textarea>
                     <label for="rating">Rating (1-5)</label>
                    <input type="range" id="rating" name="rating" min="1" max="5" step="1">
                    <p id="rating-display">3/5 (Decent)</p>
-                    <button class="btn" type="submit">Submit Review</button>
-                <% } else { %>
+                   <button class="btn" type="submit">Submit Review</button>
+                </form>
+            <% } else if (!user) { %>
+                <form class="review-form" method="POST" action="#">
+                    <input hidden name="collectionId" value="<%= collection.collection_id %>">
+                    <p class="warning">Only members can leave reviews!</p>
+                    <div class="link-container">  
+                        <a href="/login" class="btn link">Log In</a><a href="/register" class="btn link">Sign Up</a>
+                    </div>
+                    <label for="title">Title</label>
+                    <input type="text" readonly class="review-title-input disabled" id="title" name="title" maxlength="250" required>
+                    <label for="review-content">Review</label>
+                    <textarea name="reviewContent" id="review-content" readonly class="disabled" cols="30" rows="10" required></textarea>
                     <button class="btn disabled" type="submit" disabled>Submit Review</button>
-                <% } %>
-            </form>
+                </form> 
+            <% } %>
           </section>
           <hr><hr>
           <h2 class="welcome-header">See What Others Are Saying</h2>

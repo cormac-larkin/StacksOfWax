@@ -97,6 +97,15 @@ h3,
   transition: 0.2s;
 }
 
+.like-btn.already-liked {
+    background-color: rgb(255, 58, 58);
+}
+
+.like-btn.already-liked:hover {
+    background-color: red;
+}
+
+
 .like-btn:hover {
   transform: scale(1.25);
   cursor: pointer;

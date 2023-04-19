@@ -19,4 +19,15 @@ router.post("/add", ensureAuthenticated, (req, res) => {
   );
 });
 
+router.post("/delete", ensureAuthenticated, (req, res) => {
+    const userId = req.session.user.id;
+    const { collectionId } = req.body;
+
+    // Delete the Like from the Database and redirect back to the collection page
+    db.query("DELETE FROM likes WHERE user_id = ? AND collection_id = ?", [userId, collectionId], (err, result) => {
+        if (err) throw err;
+        res.redirect(`/collections?id=${collectionId}`);
+    });
+});
+
 module.exports = router;

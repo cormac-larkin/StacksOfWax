@@ -92,12 +92,27 @@ router.get("/", (req, res) => {
             if (err) throw err;
             const reviews = result;
 
+            let alreadyReviewed = false;
+            reviews.forEach((review) => {
+              if (req.session.user && review.user_id == req.session.user.id) {
+                alreadyReviewed = true;
+              } 
+            });
+            
             // Retrieve the likes for this collection
             db.query("SELECT * FROM likes WHERE collection_id = ?", [collectionId], (err, result) => {
               if (err) throw err;
               const likes = result;
 
-              res.render("inspect_collection", { user: req.session.user, collection, vinyls, likes, reviews });
+              // Check if the User viewing the page has already liked the collection (If yes, the 'Like' button will be disabled in template)
+              let alreadyLiked = false;
+              likes.forEach((like) => {
+                if (req.session.user && like.user_id == req.session.user.id) {
+                  alreadyLiked = true;
+                }
+              });
+
+              res.render("inspect_collection", { user: req.session.user, collection, vinyls, alreadyLiked, alreadyReviewed, likes, reviews });
             })
           })
         }
