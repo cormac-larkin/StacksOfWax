@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../globals.css" />
     <link rel="stylesheet" href="../navbar.css" />
     <link rel="stylesheet" href="../vinyls.css" />
-    <title>Browse Vinyls</title>
+    <title><%= filterName %> Vinyls</title>
   </head>
   <body>
     <%- include("./partials/navbar") %>
@@ -20,36 +20,44 @@
           class="banner-image"
         />
         <header class="page-header">
-          <hr>
+          <hr/>
+          <hr/>
           <div class="info-container">
             <div class="info-left">
-              <h2 class="welcome-header">Vinyls</h2>
+              <h2 class="welcome-header"><%= filterName %> Vinyls</h2>
+              <% if (vinyls.length == 1) { %>
+                <h4 class="header-text"><%= vinyls.length %> result</h4>
+              <% } else { %>
+                <h4 class="header-text"><%= vinyls.length %> results</h4>
+              <% } %>  
+              
               <p class="header-text">Click on a vinyl to see the track-list and more information!</p>
             </div>
             <div class="info-right">
               <form method="GET" action="/vinyls/genre" class="filter-form">
                 <label for="genre-selector">Filter By Genre</label>
-                <select id="genre-selector" name="id" class="filter-selector">
+                <select id="genre-selector" name="name" class="filter-selector">
                   <% genres.forEach(genre => { %>
-                    <option value="<%= genre.genre_id %>"><%= genre.name %></option>
+                    <option value="<%= genre.name %>"><%= genre.name %></option>
                   <% }) %>
                 </select>
-                <button class="btn filter-btn" type="submit">GO!</button>
+                <button class="btn filter-btn" type="submit">Go</button>
               </form>
                 <form method="GET" action="/vinyls/artist" class="filter-form">
                   <label for="artist-selector">Filter By Artist</label>
-                  <select id="artist-selector" name="id" class="filter-selector">
+                  <select id="artist-selector" name="name" class="filter-selector">
                     <% artists.forEach(artist => { %>
-                      <option value="<%= artist.artist_id %>"><%= artist.name %></option>
+                      <option value="<%= artist.name %>"><%= artist.name %></option>
                     <% }) %>
                   </select>
-                  <button class="btn filter-btn" type="submit">GO</button>
+                  <button class="btn filter-btn" type="submit">Go</button>
               </form>
               
             </div>
           </div>
           
-          <hr>
+          <hr/>
+          <hr/>
           <div class="card-grid">
 
             <% for( let i = 0; i < vinyls.length; i++ ) { %>

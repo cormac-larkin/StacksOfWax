@@ -42,7 +42,7 @@
 .info-right {
     display: flex;
     flex-direction: column;
-    min-width: 50%;
+    min-width: 40%;
     border-left: 1px solid grey;
     padding-left: 1rem;
 }
@@ -56,7 +56,7 @@
 label {
     font-weight: bold;
     text-align: left;
-    padding-top: 1rem;
+    padding-top: 0;
 }
 
 input, select {
@@ -172,12 +172,15 @@ ul {
 .btn.filter-btn {
     height: auto;
     margin-top: 0.5rem;
+    max-width: 10rem;
+    margin-bottom: 1rem;
 
 }
 
-.btn:hover {
+.btn.filter-btn:hover {
     background-color: rgb(3, 200, 108);
     transform: scale(1.03);
+    cursor: pointer;
 }
 
 .card.blocked {
