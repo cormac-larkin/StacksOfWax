@@ -213,6 +213,12 @@ textarea {
     align-items: center;
 }
 
+#rating-display {
+    margin-top: 0;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
 input:focus, textarea:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgb(0, 255, 94);

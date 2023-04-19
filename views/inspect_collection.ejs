@@ -68,7 +68,7 @@
           <hr />
           <section class="create-review">
             <form class="review-form" method="POST" action="/reviews/add">
-                <input hidden name="collection_id" value="<%= collection.collection_id %>">
+                <input hidden name="collectionId" value="<%= collection.collection_id %>">
                 <% if (!user) { %>
                     <p class="warning">Only members can leave reviews!</p>
                     <div class="link-container">
@@ -86,7 +86,7 @@
                 <% } %>
            maxlength="250" required>
                 <label for="review-content">Review</label>
-                <textarea name="content" id="review-content"
+                <textarea name="reviewContent" id="review-content"
                 <% if (!user) { %>
                     readonly class="disabled"
                    <% } %>  cols="30" rows="10"
@@ -94,6 +94,9 @@
                     placeholder="Don't hold back!"
                    <% } %>  required></textarea>
                 <% if (user) { %>
+                    <label for="rating">Rating (1-5)</label>
+                   <input type="range" id="rating" name="rating" min="1" max="5" step="1">
+                   <p id="rating-display">3/5 (Decent)</p>
                     <button class="btn" type="submit">Submit Review</button>
                 <% } else { %>
                     <button class="btn disabled" type="submit" disabled>Submit Review</button>
@@ -108,4 +111,5 @@
     </div>
   </body>
   <script src="navbar.js"></script>
+  <script src="inspectCollection.js"></script>
 </html>
