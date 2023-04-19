@@ -85,9 +85,18 @@ router.get("/", (req, res) => {
         [collectionId],
         (err, result) => {
           if (err) throw err;
-
           const vinyls = result;
-          res.render("inspect_collection", { user: req.session.user, collection, vinyls });
+
+          // Retrieve reviews for this collection
+          db.query("SELECT user.user_id, first_name, last_name, title, rating, review.text, review.timestamp FROM review INNER JOIN user ON user.user_id = review.user_id WHERE collection_id = ?", [collectionId], (err, result) => {
+            if (err) throw err;
+            const reviews = result;
+
+            res.render("inspect_collection", { user: req.session.user, collection, vinyls, reviews });
+          })
+
+
+          
         }
       );
     }

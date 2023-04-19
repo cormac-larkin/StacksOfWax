@@ -35,8 +35,13 @@
             </div>
 
             <div class="right-info">
-              <h4 class="header-text">NUMBER OF REVIEWS</h4>
               <h4 class="header-text">NUMBER OF LIKES</h4>
+              <% if (reviews.length == 1) { %>
+                <h4 class="header-text"><%= reviews.length %> Review</h4>
+              <% } else {%>
+                <h4 class="header-text"><%= reviews.length %> Reviews</h4>
+                <% } %>
+              
             </div>
           </div>
 
@@ -106,6 +111,16 @@
           <hr><hr>
           <h2 class="welcome-header">See What Others Are Saying</h2>
           <hr><hr>
+          <% reviews.forEach(review => { %>
+            <div class="review-container">
+                <h3><%= review.title %></h3>
+                <h4 class="header-text review-stars"><%= review.rating %>/5 &#9733;</h4>
+                <h4 class="header-text review-info"><%= review.first_name %> <%= review.last_name %> | <%= review.timestamp.toLocaleDateString() %></h4>
+                
+                <p class="header-text review-text"><%= review.text %></p>
+            </div>
+           <hr />
+          <% }) %>
         </header>
       </main>
     </div>

@@ -219,6 +219,19 @@ textarea {
     font-weight: bold;
 }
 
+.header-text.review-text {
+    color: black;
+    font-weight: 500;
+}
+
+.header-text.review-stars {
+    margin-bottom: 0;
+}
+
+.header-text.review-info {
+    margin-top: 0;
+}
+
 input:focus, textarea:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgb(0, 255, 94);
