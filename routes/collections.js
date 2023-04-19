@@ -92,11 +92,14 @@ router.get("/", (req, res) => {
             if (err) throw err;
             const reviews = result;
 
-            res.render("inspect_collection", { user: req.session.user, collection, vinyls, reviews });
+            // Retrieve the likes for this collection
+            db.query("SELECT * FROM likes WHERE collection_id = ?", [collectionId], (err, result) => {
+              if (err) throw err;
+              const likes = result;
+
+              res.render("inspect_collection", { user: req.session.user, collection, vinyls, likes, reviews });
+            })
           })
-
-
-          
         }
       );
     }

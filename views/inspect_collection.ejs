@@ -22,20 +22,41 @@
         <header class="page-header">
           <hr />
           <hr />
-          <h2 class="welcome-header"><%= collection.name %></h2>
+          
 
           <div class="info-container">
             <div class="left-info">
+                <h2 class="welcome-header"><%= collection.name %></h2>
               <h4 class="header-text">
-                By <%= collection.first_name %> <%= collection.last_name %>
+                By <u><%= collection.first_name %> <%= collection.last_name %></u>
               </h4>
+             
+              <h4 class="header-text"><%= vinyls.length %> Vinyls</h4>
               <h4 class="header-text">
                 Created on <%= collection.timestamp.toLocaleDateString() %>
               </h4>
             </div>
 
             <div class="right-info">
-              <h4 class="header-text">NUMBER OF LIKES</h4>
+                    <form method="POST" action="/likes/add" class="like-form">
+                        <input type="hidden" name="collectionId" value="<%= collection.collection_id %>">
+                        <button 
+                        <% if (user) { %>
+                            class="like-btn"
+                        <% } else { %>
+                            class="like-btn disabled"
+                            disabled
+                        <% } %>
+                         type="submit">LIKE | &#128077;</button>
+                        <% if (!user) { %>
+                         <a href="/login"><u><b>Log In</b></u> to Like Collections</a>
+                        <% } %>
+                    </form>
+                <% if (likes.length == 1) { %>
+                    <h4 class="header-text"><%= likes.length %> Like</h4>
+                <% } else {%>
+                    <h4 class="header-text"><%= likes.length %> Likes</h4>
+                <% } %>
               <% if (reviews.length == 1) { %>
                 <h4 class="header-text"><%= reviews.length %> Review</h4>
               <% } else {%>
