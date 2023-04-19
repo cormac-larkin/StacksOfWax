@@ -4,14 +4,55 @@ const ensureAuthenticated = require("../middleware/ensureAuthenticated");
 
 const router = express.Router();
 
-router.get("/browse", (req, res) => {
-  db.query(
-    "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id GROUP BY vinyl.name",
-    (err, result) => {
+router.get("/genre", (req, res) => {
+  // Get genre name from query string and insert into query
+  const genreId = req.query.id;
+  const query = "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id WHERE genre.genre_id = ? GROUP BY vinyl.name";
+
+  // Get all vinyl info
+  db.query(query, [genreId], (err, result) => {
+    if (err) throw err;
+    const vinyls = result;
+
+    // Get all genres for 'filter by genre' dropdown menu
+    db.query("SELECT * FROM genre", (err, result) => {
       if (err) throw err;
-      res.render("vinyls", { user: req.session.user, vinyls: result });
-    }
-  );
+      const genres = result;
+
+      // Get all artists for 'filter by artist' menu
+      db.query("SELECT * FROM artist", (err, result) => {
+        if (err) throw err;
+        const artists = result;
+
+        res.render("vinyls", { user: req.session.user, vinyls, artists, genres });
+      });
+    });
+  });
+});
+
+router.get("/browse", (req, res) => {
+
+  const query = "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id GROUP BY vinyl.name"
+
+    // Get all vinyl info
+    db.query(query, (err, result) => {
+      if (err) throw err;
+      const vinyls = result;
+  
+      // Get all genres for 'filter by genre' dropdown menu
+      db.query("SELECT * FROM genre", (err, result) => {
+        if (err) throw err;
+        const genres = result;
+  
+        // Get all artists for 'filter by artist' menu
+        db.query("SELECT * FROM artist", (err, result) => {
+          if (err) throw err;
+          const artists = result;
+  
+          res.render("vinyls", { user: req.session.user, vinyls, artists, genres });
+        });
+      });
+    });
 });
 
 router.get("/add", ensureAuthenticated, (req, res) => {

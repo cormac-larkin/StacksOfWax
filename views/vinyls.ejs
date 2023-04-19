@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../globals.css" />
     <link rel="stylesheet" href="../navbar.css" />
     <link rel="stylesheet" href="../vinyls.css" />
-    <title>Vinyl Catalogue</title>
+    <title>Browse Vinyls</title>
   </head>
   <body>
     <%- include("./partials/navbar") %>
@@ -21,9 +21,34 @@
         />
         <header class="page-header">
           <hr>
-          <h2 class="welcome-header">Vinyl Catalogue</h2>
-          <br>
-          <p class="header-text">Click on a vinyl to see the track-list and more information!</p>
+          <div class="info-container">
+            <div class="info-left">
+              <h2 class="welcome-header">Vinyls</h2>
+              <p class="header-text">Click on a vinyl to see the track-list and more information!</p>
+            </div>
+            <div class="info-right">
+              <form method="GET" action="/vinyls/genre" class="filter-form">
+                <label for="genre-selector">Filter By Genre</label>
+                <select id="genre-selector" name="id" class="filter-selector">
+                  <% genres.forEach(genre => { %>
+                    <option value="<%= genre.genre_id %>"><%= genre.name %></option>
+                  <% }) %>
+                </select>
+                <button class="btn filter-btn" type="submit">GO!</button>
+              </form>
+                <form method="GET" action="/vinyls/artist" class="filter-form">
+                  <label for="artist-selector">Filter By Artist</label>
+                  <select id="artist-selector" name="id" class="filter-selector">
+                    <% artists.forEach(artist => { %>
+                      <option value="<%= artist.artist_id %>"><%= artist.name %></option>
+                    <% }) %>
+                  </select>
+                  <button class="btn filter-btn" type="submit">GO</button>
+              </form>
+              
+            </div>
+          </div>
+          
           <hr>
           <div class="card-grid">
 

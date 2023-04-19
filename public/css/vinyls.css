@@ -34,6 +34,39 @@
     min-width: calc(100% - 1rem);
 }
 
+.info-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-right {
+    display: flex;
+    flex-direction: column;
+    min-width: 50%;
+    border-left: 1px solid grey;
+    padding-left: 1rem;
+}
+
+.filter-form {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+
+label {
+    font-weight: bold;
+    text-align: left;
+    padding-top: 1rem;
+}
+
+input, select {
+    height: 2.25rem;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding-left: 0.5rem;
+    transition: 0.1s;
+}
+
 h2, h3 {
     margin: 0;
     text-decoration: underline;
@@ -126,8 +159,6 @@ ul {
 }
 
 .btn {
-    height: 100%;
-    width: 100%;
     color: white;
     font-size: large;
     border: none;
@@ -136,6 +167,12 @@ ul {
     background-color: rgb(1, 174, 94);
     transition: 0.2s;
     box-shadow: 0 2px 5px 0 rgba(0 ,0, 0, .2);
+}
+
+.btn.filter-btn {
+    height: auto;
+    margin-top: 0.5rem;
+
 }
 
 .btn:hover {
@@ -155,5 +192,9 @@ ul {
 @media screen and (max-width:800px) {
     h2, h3, .header-text {
         padding: 0%;
+    }
+
+    .btn.filter-btn, select {
+        max-width: 8rem;
     }
 }
