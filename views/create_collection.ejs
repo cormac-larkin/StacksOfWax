@@ -26,14 +26,18 @@
           <h3>
             Step 1
           </h3>
-          <p class="instruction">Click on Vinyls to add/remove them from your collection</p>
+          <p class="instruction">Choose a name for your new Collection!</p>
+          <label for="collection-name">Collection Name</label>
+          <input type="text" id="collection-name" name="collectionName" form="create-collection-form" placeholder="e.g 90's Classic Rock" required>
+          <h3>Step 2</h3>
+          <p class="instruction">Click on the Vinyls below to add/remove them from your collection</p>
           <h3>
-            Step 2
+            Step 3
           </h3>
           <p class="instruction">Click the <b>'Save'</b> button on the right-hand side to save your new collection!</p>
           <p class="reminder">Remember, you must choose at least 3 Vinyls for a collection before saving it!</p>
           <hr>
-          <form method="POST" action="/collections/create" class="card-grid">
+          <form method="POST" id="create-collection-form" action="/collections/create" class="card-grid">
               <% for( let i = 0; i < vinyls.length; i++ ) { %>
 
               <article class="card">

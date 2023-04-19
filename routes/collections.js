@@ -29,6 +29,7 @@ router.get("/create", ensureAuthenticated, (req, res) => {
 
 router.post("/create", ensureAuthenticated, (req, res) => {
   const userId = req.session.user.id;
+  const collectionName = req.body.collectionName;
 
   // Get the vinyl IDs
   let vinylIds = [];
@@ -40,8 +41,8 @@ router.post("/create", ensureAuthenticated, (req, res) => {
 
   // Insert the new collection and get the collection ID
   db.query(
-    "INSERT INTO collection (name, user_id) VALUES (?, ?)",
-    ["test", userId],
+    "INSERT INTO collection (name, timestamp, user_id) VALUES (?, ?, ?)",
+    [collectionName, new Date(), userId],
     (err, result) => {
       if (err) throw err;
       const collectionId = result.insertId;
@@ -66,7 +67,7 @@ router.get("/", (req, res) => {
 
   // Get the collection info
   db.query(
-    "SELECT collection_id, name, user.user_id, user.first_name, user.last_name, timestamp, image_url AS user_pic FROM collection INNER JOIN user ON collection.user_id = user.user_id WHERE collection_id = ?",
+    "SELECT collection_id, name, user.user_id, user.first_name, user.last_name, collection.timestamp, image_url AS user_pic FROM collection INNER JOIN user ON collection.user_id = user.user_id WHERE collection_id = ?",
     [collectionId],
     (err, result) => {
       if (err) throw err;

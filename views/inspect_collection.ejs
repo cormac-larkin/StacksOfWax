@@ -1,34 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="globals.css" />
     <link rel="stylesheet" href="navbar.css" />
+    <link rel="stylesheet" href="inspect_collection.css" />
     <title><%= collection.name %></title>
-</head>
-<body>
+  </head>
+  <body>
     <%- include("./partials/navbar") %>
 
-    <% vinyls.forEach(vinyl => { %>
-        <a class="card">
-            <div class="card-header">
-              <img
-                class="card-image"
-                src=<%= vinyl.image_url || "https://plus.unsplash.com/premium_photo-1677589330346-7e71871d2ce5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80" %>
-                alt=""
-              />
+    <div class="flex-container">
+      <main class="main">
+        <img
+          src="https://images.unsplash.com/photo-1484704849700-f032a568e944?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+          alt=""
+          class="banner-image"
+        />
+        <header class="page-header">
+          <hr />
+          <hr />
+          <h2 class="welcome-header"><%= collection.name %></h2>
+
+          <div class="info-container">
+            <div class="left-info">
+              <h4 class="header-text">
+                By <%= collection.first_name %> <%= collection.last_name %>
+              </h4>
+              <h4 class="header-text">
+                Created on <%= collection.timestamp.toLocaleDateString() %>
+              </h4>
             </div>
-            <div class="card-body">
-              <h3 class="vinyl-name"><%= vinyl.vinyl_name %></h3>
-              <h4 class="vinyl-artist"><%= vinyl.artist %></h4>
-              <h4 class="vinyl-year"><%= vinyl.year %> | <%= vinyl.genre %></h4>
+
+            <div class="right-info">
+              <h4 class="header-text">NUMBER OF REVIEWS</h4>
+              <h4 class="header-text">NUMBER OF LIKES</h4>
             </div>
-            <div class="card-footer">
-            </div>
-          </a>
-    <% }) %>
-</body>
-<script src="navbar.js"></script>
+          </div>
+
+          <hr />
+          <hr />
+          <div class="card-grid">
+            <% vinyls.forEach(vinyl => { %>
+            <a class="card">
+              <div class="card-header">
+                <img class="card-image" src=<%= vinyl.image_url ||
+                "https://plus.unsplash.com/premium_photo-1677589330346-7e71871d2ce5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"
+                %> alt="" />
+              </div>
+              <div class="card-body">
+                <h3 class="vinyl-name"><%= vinyl.vinyl_name %></h3>
+                <h4 class="vinyl-artist"><%= vinyl.artist %></h4>
+                <h4 class="vinyl-year">
+                  <%= vinyl.year %> | <%= vinyl.genre %>
+                </h4>
+              </div>
+              <div class="card-footer"></div>
+            </a>
+            <% }) %>
+          </div>
+          <hr />
+          <hr />
+          <h2 class="welcome-header">Leave A Review</h2>
+          <hr />
+          <hr />
+          <section class="create-review">
+            <form class="review-form" method="POST" action="/reviews/add">
+                <input hidden name="collection_id" value="<%= collection.collection_id %>">
+                <% if (!user) { %>
+                    <p class="warning">Only members can leave reviews!</p>
+                    <div class="link-container">
+                        
+                        <a href="/login" class="btn link">Log In</a><a href="/register" class="btn link">Sign Up</a>
+                    </div>
+                 
+                <% } %>
+                <label for="title">Title</label>
+                <input type="text" <% if (!user) { %>
+                 readonly class="review-title-input disabled"
+                <% } %> id="title" name="title"
+                <% if (user) { %>
+                    placeholder="Sum it up in a few words"
+                <% } %>
+           maxlength="250" required>
+                <label for="review-content">Review</label>
+                <textarea name="content" id="review-content"
+                <% if (!user) { %>
+                    readonly class="disabled"
+                   <% } %>  cols="30" rows="10"
+                   <% if (user) { %>
+                    placeholder="Don't hold back!"
+                   <% } %>  required></textarea>
+                <% if (user) { %>
+                    <button class="btn" type="submit">Submit Review</button>
+                <% } else { %>
+                    <button class="btn disabled" type="submit" disabled>Submit Review</button>
+                <% } %>
+            </form>
+          </section>
+          <hr><hr>
+          <h2 class="welcome-header">See What Others Are Saying</h2>
+          <hr><hr>
+        </header>
+      </main>
+    </div>
+  </body>
+  <script src="navbar.js"></script>
 </html>
