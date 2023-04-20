@@ -31,7 +31,8 @@
               <form method="GET" action="/collections/browse" class="filter-form">
                 <input type="hidden" name="field" value="likes">
                 <label for="like-selector">Sort By Likes</label>
-                <select id="like-selector" name="order" class="filter-selector">
+                <select id="like-selector" name="order" class="filter-selector" required>
+                  <option value="" disabled selected>--Select an Option</option>
                   <option value="DESC">High to Low</option>
                   <option value="ASC">Low to High</option>
                 </select>
@@ -40,7 +41,8 @@
                 <form method="GET" action="/collections/browse" class="filter-form">
                   <input type="hidden" name="field" value="rating">
                   <label for="rating-selector">Sort By Rating</label>
-                  <select id="rating-selector" name="order" class="filter-selector">
+                  <select id="rating-selector" name="order" class="filter-selector" required>
+                    <option value="" disabled selected>--Select an Option</option>
                     <option value="DESC">High to Low</option>
                     <option value="ASC">Low to High</option>
                   </select>

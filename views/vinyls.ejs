@@ -37,7 +37,8 @@
               <form method="GET" action="/vinyls/browse" class="filter-form">
                 <input type="hidden" name="field" value="genre">
                 <label for="genre-selector">Filter By Genre</label>
-                <select id="genre-selector" name="name" class="filter-selector">
+                <select id="genre-selector" name="name" class="filter-selector" required>
+                  <option value="" disabled selected>--Select a Genre</option>
                   <% genres.forEach(genre => { %>
                     <option value="<%= genre.name %>"><%= genre.name %></option>
                   <% }) %>
@@ -47,7 +48,8 @@
                 <form method="GET" action="/vinyls/browse" class="filter-form">
                   <input type="hidden" name="field" value="artist">
                   <label for="artist-selector">Filter By Artist</label>
-                  <select id="artist-selector" name="name" class="filter-selector">
+                  <select id="artist-selector" name="name" class="filter-selector" required>
+                    <option value="" disabled selected>--Select an Artist</option>
                     <% artists.forEach(artist => { %>
                       <option value="<%= artist.name %>"><%= artist.name %></option>
                     <% }) %>

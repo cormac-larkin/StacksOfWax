@@ -35,7 +35,7 @@ router.get("/browse", (req, res) => {
           if (err) throw err;
           const artists = result;
   
-          res.render("vinyls", { user: req.session.user, vinyls, artists, genres, filterName: queryParams.name || ""});
+          res.render("vinyls", { user: req.session.user, vinyls, artists, genres, filterName: queryParams.name || "All"});
         });
       });
     });
@@ -135,6 +135,25 @@ router.post("/add", ensureAuthenticated, (req, res) => {
       );
     }
   );
+});
+
+router.get("/", (req, res) => {
+
+  const vinylId = req.query.id;
+  const sqlQuery = "SELECT track.name, `year`, image_url, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, artist.artist_id, vinyl.name AS vinyl FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON artist.artist_id = vinyl.artist_id INNER JOIN track ON vinyl.vinyl_id = track.vinyl_id WHERE vinyl.vinyl_id = ? GROUP BY track.name";
+
+  db.query(sqlQuery, [vinylId], (err, result) => {
+
+    if (err) throw err;
+
+    // Return a 404 error if no vinyl is found
+    if (result.length === 0) {
+      return res.status(404).send();
+    }
+    
+    const tracks = result;
+    res.render("inspect_vinyl", { user: req.session.user, tracks } );
+  });
 });
 
 module.exports = router;
