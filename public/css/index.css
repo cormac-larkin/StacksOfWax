@@ -120,6 +120,13 @@ ul {
     box-shadow: 0 2px 5px 0 rgba(0 ,0, 0, .2);
 }
 
+.btn > a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    width: 100%;
+}
+
 .btn:hover {
     background-color: rgb(3, 200, 108);
     transform: scale(1.03);

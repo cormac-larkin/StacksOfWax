@@ -21,9 +21,11 @@
         />
         <header class="page-header">
           <hr />
+          <hr />
           <h2 class="welcome-header">Browse Collections</h2>
           <br />
           <p class="header-text">Click on a collection for more information!</p>
+          <hr />
           <hr />
           <div class="card-grid">
             <% collections.forEach(collection => { %>
@@ -39,8 +41,21 @@
               <div class="card-body">
                 <h3 class="vinyl-name"><%= collection.collection_name %></h3>
                 <h4 class="vinyl-artist">
-                  <%= collection.first_name %> <%= collection.last_name %>
+                  By <%= collection.first_name %> <%= collection.last_name %>
                 </h4>
+                <% if (collection.likes == 1) { %>
+                  <h4 class="vinyl-artist">
+                    <%= collection.likes %> Like
+                  </h4>
+                <% } else { %>
+                  <h4 class="vinyl-artist">
+                    <%= collection.likes %> Likes
+                  </h4>
+                <% } %>
+                <h4 class="vinyl-artist">
+                  <%= collection.rating || 0 %> &#11088; from <%= collection.reviews %> reviews
+                </h4>
+
               </div>
               <div class="card-footer"></div>
             </a>

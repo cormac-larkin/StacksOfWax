@@ -41,12 +41,12 @@ router.get("/artist", (req, res) => {
     const vinyls = result;
 
     // Get all genres for 'filter by genre' dropdown menu
-    db.query("SELECT * FROM genre", (err, result) => {
+    db.query("SELECT * FROM genre ORDER BY name ASC", (err, result) => {
       if (err) throw err;
       const genres = result;
 
       // Get all artists for 'filter by artist' menu
-      db.query("SELECT * FROM artist", (err, result) => {
+      db.query("SELECT * FROM artist ORDER BY name ASC", (err, result) => {
         if (err) throw err;
         const artists = result;
 
@@ -66,12 +66,12 @@ router.get("/browse", (req, res) => {
       const vinyls = result;
   
       // Get all genres for 'filter by genre' dropdown menu
-      db.query("SELECT * FROM genre", (err, result) => {
+      db.query("SELECT * FROM genre ORDER BY name ASC", (err, result) => {
         if (err) throw err;
         const genres = result;
 
         // Get all artists for 'filter by artist' menu
-        db.query("SELECT * FROM artist", (err, result) => {
+        db.query("SELECT * FROM artist ORDER BY name ASC", (err, result) => {
           if (err) throw err;
           const artists = result;
   
@@ -97,7 +97,7 @@ router.get("/add", ensureAuthenticated, (req, res) => {
 router.post("/add", ensureAuthenticated, (req, res) => {
   // Get vinyl info from req.body
   const { vinylName, genre, subGenre, artist, year, albumArt } = req.body;
-  console.log(req.body);
+  
 
   // Get the track names
   let trackNames = [];

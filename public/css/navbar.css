@@ -21,6 +21,11 @@ body {
   margin: 0.5rem;
 }
 
+.brand-title > a {
+  color: white;
+  text-decoration: none;
+}
+
 .navbar-links {
   height: 100%;
 }

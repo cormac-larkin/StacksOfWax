@@ -5,8 +5,14 @@ const ensureAuthenticated = require("../middleware/ensureAuthenticated");
 const router = express.Router();
 
 router.get("/browse", (req, res) => {
+
+  // // Check if query param was given
+  // if (Object.keys(req.query).length === 0) {
+
+  // }
+
   db.query(
-    "SELECT collection.collection_id, collection.name AS collection_name, first_name, last_name FROM collection INNER JOIN user ON collection.user_id = user.user_id GROUP BY collection.collection_id",
+    "SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id",
     (err, result) => {
       const collections = result;
       res.render("browse_collections", { user: req.session.user, collections });
