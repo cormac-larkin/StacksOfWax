@@ -36,21 +36,42 @@
 }
 
 .album-cover {
+  display: flex;
+  justify-content: center;
   margin-top: 1rem;
   margin-right: 0.5rem;
 }
 
 .cover-image {
   border-radius: 5px;
+  height: 600px;
+  width: 600px;
   aspect-ratio: 1/1;
-  width: 95%;
 }
 
 .track-names {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   border-left: 1px solid grey;
+  padding-left: 1rem;
+  min-width: 40%;
+}
+
+.track {
+    display: flex;
+    align-items: center;
+    width: 90%;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+}
+
+.track:hover {
+    background-color: rgb(216, 216, 216);
+    cursor: pointer;
 }
 
 h2,
@@ -68,28 +89,22 @@ h3:hover {
 h2,
 h3,
 .header-text {
-  padding-left: 1rem;
+  padding-left: 0;
 }
 
 .header-text {
   line-height: 1.5;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
   margin-top: 0.5rem;
-}
-
-.track {
-  width: 90%;
-  border-radius: 5px;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 .vinyl-name,
 .vinyl-year,
 .vinyl-artist {
   padding: 0%;
-  margin: 0.5rem;
+  margin: 0;
+  padding-top: 0.2rem;
+  padding-bottom: 1.5rem;
 }
 
 .vinyl-year,
@@ -121,6 +136,18 @@ h3,
   cursor: pointer;
 }
 
+@media screen and (max-width: 1300px) {
+
+    .track-names {
+        min-width: auto;
+    }
+
+    .track {
+        width: 90%;
+    }
+}
+
+
 @media screen and (max-width: 900px) {
   h2,
   h3,
@@ -136,14 +163,27 @@ h3,
     border-left: none;
   }
 
+  .track {
+    width: 100%;
+    height: 3rem;
+    margin-bottom: 0.75rem;
+  }
+
   .album-cover {
     display: flex;
-    justify-content: center;
     margin-right: 0;
   }
 
   .cover-image {
-    
-    
+    height: 75vw;
+    width: 75vw;
   }
 }
+
+@media screen and (max-width: 600px) {
+    .cover-image {
+        height: 95vw;
+        width: 95vw;
+      }
+}
+

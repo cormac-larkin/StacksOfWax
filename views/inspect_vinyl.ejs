@@ -14,17 +14,13 @@
 
     <div class="flex-container">
       <main class="main">
-        <img
-          src="https://images.unsplash.com/photo-1499415479124-43c32433a620?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1332&q=80"
-          alt=""
-          class="banner-image"
-        />
         <header class="page-header">
           <div class="album-cover">
             <img class="cover-image" src="<%= tracks[0].image_url %>" alt="" />
           </div>
           <div class="track-names">
             <h2 class="header-text"><%= tracks[0].vinyl %> | <%= tracks[0].artist %></h2>
+            <h4 class="vinyl-year"><%= tracks[0].genre %> | <%= tracks[0].year %></h4>
             <% for (let i = 0; i < tracks.length; i++) { %>
                 <div class="track">
                     <% if (i > 8) { %>

@@ -107,6 +107,7 @@ ul {
     overflow: hidden;
     border-radius: 5px;
     box-shadow: 0 2px 5px 0 rgba(0 ,0, 0, .2);
+    text-decoration: none;
 }
 
 
@@ -145,6 +146,10 @@ ul {
 .vinyl-name, .vinyl-year, .vinyl-artist {
     padding: 0%;
     margin: 0.5rem;
+}
+
+.vinyl-name {
+    color: black;
 }
 
 .vinyl-year, .vinyl-artist {
