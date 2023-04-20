@@ -6,37 +6,24 @@ const router = express.Router();
 
 router.get("/browse", (req, res) => {
 
+  const queryParams = req.query;
+
+  // This SQL query will be used if no query params were given in the URL
+  let sqlQuery = "SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id";
+  
+  // If the URL contains query params, use them to construct a new query
+  if (Object.keys(queryParams).length > 0) {
+    sqlQuery = `SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id ORDER BY ${queryParams.field} ${queryParams.order}`;
+  }
+
   db.query(
-    "SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id",
+    sqlQuery,
     (err, result) => {
+      if (err) throw err;
       const collections = result;
       res.render("browse_collections", { user: req.session.user, collections });
     }
   );
-});
-
-router.get("/likes", (req, res) => {
-
-  const sortOrder = req.query.sortOrder;
-  const query = `SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id ORDER BY likes ${sortOrder}`;
-
-  db.query(query, (err, result) => {
-    if (err) throw err;
-    const collections = result;
-    res.render("browse_collections", { user: req.session.user, collections });
-  });
-});
-
-router.get("/ratings", (req, res) => {
-
-  const sortOrder = req.query.sortOrder;
-  const query = `SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id ORDER BY rating ${sortOrder}`;
-
-  db.query(query, (err, result) => {
-    if (err) throw err;
-    const collections = result;
-    res.render("browse_collections", { user: req.session.user, collections });
-  });
 });
 
 router.get("/create", ensureAuthenticated, (req, res) => {
