@@ -4,64 +4,24 @@ const ensureAuthenticated = require("../middleware/ensureAuthenticated");
 
 const router = express.Router();
 
-router.get("/genre", (req, res) => {
-  // Get genre name from query string and insert into query
-  const filterName = req.query.name;
-  const query = "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id WHERE genre.name = ? GROUP BY vinyl.name";
-
-  // Get all vinyl info
-  db.query(query, [filterName], (err, result) => {
-    if (err) throw err;
-    const vinyls = result;
-
-    // Get all genres for 'filter by genre' dropdown menu
-    db.query("SELECT * FROM genre", (err, result) => {
-      if (err) throw err;
-      const genres = result;
-
-      // Get all artists for 'filter by artist' menu
-      db.query("SELECT * FROM artist", (err, result) => {
-        if (err) throw err;
-        const artists = result;
-
-        res.render("vinyls", { user: req.session.user, vinyls, artists, genres, filterName });
-      });
-    });
-  });
-});
-
-router.get("/artist", (req, res) => {
-  // Get genre name from query string and insert into query
-  const filterName = req.query.name;
-  const query = "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id WHERE artist.name = ? GROUP BY vinyl.name";
-
-  // Get all vinyl info
-  db.query(query, [filterName], (err, result) => {
-    if (err) throw err;
-    const vinyls = result;
-
-    // Get all genres for 'filter by genre' dropdown menu
-    db.query("SELECT * FROM genre ORDER BY name ASC", (err, result) => {
-      if (err) throw err;
-      const genres = result;
-
-      // Get all artists for 'filter by artist' menu
-      db.query("SELECT * FROM artist ORDER BY name ASC", (err, result) => {
-        if (err) throw err;
-        const artists = result;
-
-        res.render("vinyls", { user: req.session.user, vinyls, artists, genres, filterName });
-      });
-    });
-  });
-});
-
 router.get("/browse", (req, res) => {
 
-  const query = "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id GROUP BY vinyl.name"
+  const queryParams = req.query;
+  let sqlValues = [];
+
+
+  // The default SQL query if no filter was provided in the query params
+  let sqlQuery = "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id GROUP BY vinyl.name"
+
+  // If query params were given, use them to construct a new query
+  if (Object.keys(queryParams).length > 0) {
+    sqlValues.push(queryParams.field.concat(".name"));
+    sqlValues.push(queryParams.name);
+    sqlQuery = `SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id WHERE ?? = ? GROUP BY vinyl.name`
+  }
 
     // Get all vinyl info
-    db.query(query, (err, result) => {
+    db.query(sqlQuery, sqlValues, (err, result) => {
       if (err) throw err;
       const vinyls = result;
   
@@ -75,7 +35,7 @@ router.get("/browse", (req, res) => {
           if (err) throw err;
           const artists = result;
   
-          res.render("vinyls", { user: req.session.user, vinyls, artists, genres, filterName: ""});
+          res.render("vinyls", { user: req.session.user, vinyls, artists, genres, filterName: queryParams.name || ""});
         });
       });
     });

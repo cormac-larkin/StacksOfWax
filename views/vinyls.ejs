@@ -34,7 +34,8 @@
               <p class="header-text">Click on a vinyl to see the track-list and more information!</p>
             </div>
             <div class="info-right">
-              <form method="GET" action="/vinyls/genre" class="filter-form">
+              <form method="GET" action="/vinyls/browse" class="filter-form">
+                <input type="hidden" name="field" value="genre">
                 <label for="genre-selector">Filter By Genre</label>
                 <select id="genre-selector" name="name" class="filter-selector">
                   <% genres.forEach(genre => { %>
@@ -43,7 +44,8 @@
                 </select>
                 <button class="btn filter-btn" type="submit">Go</button>
               </form>
-                <form method="GET" action="/vinyls/artist" class="filter-form">
+                <form method="GET" action="/vinyls/browse" class="filter-form">
+                  <input type="hidden" name="field" value="artist">
                   <label for="artist-selector">Filter By Artist</label>
                   <select id="artist-selector" name="name" class="filter-selector">
                     <% artists.forEach(artist => { %>
