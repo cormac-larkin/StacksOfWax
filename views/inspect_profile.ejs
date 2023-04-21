@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./globals.css" />
+    <link rel="stylesheet" href="./navbar.css" />
+    <link rel="stylesheet" href="./inspect_profile.css" />
+    <title><%= userData.first_name %> <%= userData.last_name %></title>
+</head>
+<body>
+    <%- include("./partials/navbar") %>
+
+    <div class="flex-container">
+        <main class="main">
+            <header class="page-header">
+                <div class="info-container">
+                    <div class="pic-container">
+                        <img class="profile-pic" src="<%= userData.image_url || "https://cvhrma.org/wp-content/uploads/2015/07/default-profile-photo.jpg"%>" alt="" />
+                        <% if (profileOwner) { %>
+                         <a href="#" class="edit-link">Change Profile Picture</a>
+                        <% } %>
+                    </div>
+    
+                    <div class="user-info">
+                        <div class="info-top">
+                            <h2 class="welcome-header">
+                                <%= userData.first_name %> <%= userData.last_name %>
+                            </h2>
+                            <h4 class="vinyl-year">Member Since <%= userData.join_date.toLocaleDateString() %></h4>
+                            <h4 class="vinyl-year">Last Active <%= userData.last_login.toLocaleDateString() %></h4>
+                        </div>
+                        <div class="info-bottom">
+                            <% if (reviews.length == 1) { %>
+                                <h4 class="vinyl-year"><%= reviews.length %> Review</h4>
+                            <% } else { %>
+                                <h4 class="vinyl-year"><%= reviews.length %> Reviews</h4>
+                            <% } %>
+
+                            <% if (collections.length == 1) { %>
+                                <h4 class="vinyl-year"><%= collections.length %> Collection</h4>
+                            <% } else { %>
+                                <h4 class="vinyl-year"><%= collections.length %> Collections</h4>
+                            <% } %>
+                            
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <hr/>
+                    <% if (profileOwner) { %>
+                       <h2 class="welcome-header">Your Collections</h2>
+                    <% } else if (userData.first_name.endsWith("s")) {  %>
+                        <h2 class="welcome-header"><%= userData.first_name %>' Collections</h2>
+                    <% } else { %>
+                        <h2 class="welcome-header"><%= userData.first_name %>'s Collections</h2>
+                    <% } %>
+                    <hr />
+                    <hr />
+                    <div class="card-grid">
+                        <% collections.forEach(collection => { %>
+                            <a class="card" href="/collections?id=<%= collection.collection_id %>">
+                                <div class="card-body">
+                                  <h3 class="vinyl-name"><%= collection.collection_name %></h>
+                                  <% if (collection.likes == 1) { %>
+                                    <h4 class="vinyl-artist">
+                                      <%= collection.likes %> Like
+                                    </h4>
+                                  <% } else { %>
+                                    <h4 class="vinyl-artist">
+                                      <%= collection.likes %> Likes
+                                    </h4>
+                                  <% } %>
+                                  <% if (!collection.rating) { %>
+                                   <h4 class="vinyl-artist">
+                                    No reviews yet!
+                                  </h4>
+                                  <% } else if (collection.reviews == 1) {%>
+                                    <h4 class="vinyl-artist">
+                                      <%= collection.rating %> &#11088; from <%= collection.reviews %> review
+                                    </h4>
+                                  <% } else {%>
+                                    <h4 class="vinyl-artist">
+                                      <%= collection.rating %> &#11088; from <%= collection.reviews %> reviews
+                                    </h4>
+                                  <% } %>
+                                </div>
+                                <div class="card-footer"></div>
+                              </a>
+                        <% }) %>
+                    </div>
+                <hr/>
+                <hr/>
+                <% if (profileOwner) { %>
+                    <h2 class="welcome-header">Your Reviews</h2>
+                 <% } else if (userData.first_name.endsWith("s")) {  %>
+                     <h2 class="welcome-header"><%= userData.first_name %>' Reviews</h2>
+                 <% } else { %>
+                     <h2 class="welcome-header"><%= userData.first_name %>'s Reviews</h2>
+                 <% } %>
+                 <hr/>
+                 <hr/>
+                 <% reviews.forEach(review => { %>
+                    <div class="review-container">
+                        <h3>'<%= review.title %>' | <a href="/collections?id=<%= review.collection_id %>"><%= review.name %></a></h3>
+                        <h4 class="header-text review-stars"><%= review.rating %>/5 &#11088;</h4>
+                        <h4 class="header-text review-info"><%= review.timestamp.toLocaleDateString() %></h4>
+                        <p class="header-text review-text"><%= review.text %></p>
+                    </div>
+                   <hr />
+                  <% }) %>
+            </header>
+        </main>
+        
+    </div>
+    
+</body>
+<script src="./navbar.js"></script>
+</html>

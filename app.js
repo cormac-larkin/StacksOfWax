@@ -12,6 +12,7 @@ const logoutRoutes = require("./routes/logout");
 const collectionRoutes = require("./routes/collections");
 const reviewRoutes = require("./routes/reviews");
 const likeRoutes = require("./routes/likes");
+const userRoutes = require("./routes/users");
 
 // Configure Express
 const app = express();
@@ -40,6 +41,7 @@ app.use("/vinyls", vinylRoutes);
 app.use("/collections", collectionRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/likes", likeRoutes);
+app.use("/users", userRoutes);
 
 app.get("/", ensureNotAuthenticated, (req, res) => {
   res.render("landing");

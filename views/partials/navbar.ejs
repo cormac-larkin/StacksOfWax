@@ -10,7 +10,7 @@
       <li><a href="/vinyls/browse">Vinyls</a></li>
       <li><a href="/collections/browse">Collections</a></li>
       <% if (user) { %>
-      <li><a href="#">Account</a></li>
+      <li><a href="/users?id=<%= user.id %>">Account</a></li>
       <li><a href="/logout" id="logout">Logout</a></li>
       <% } else { %>
       <li><a href="/login">Log In</a></li>

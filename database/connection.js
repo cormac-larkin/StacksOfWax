@@ -10,6 +10,7 @@ const db = mysql.createConnection({
     password: "",
     database: "stacks_of_wax",
     port: "3306",
+    multipleStatements: true
 });
 
 db.connect((err) => {

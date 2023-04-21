@@ -26,8 +26,6 @@
 }
 
 .page-header {
-  display: flex;
-  justify-content: center;
   background: rgb(255, 255, 255);
   border-radius: 5px;
   padding: 0.5rem;
@@ -36,47 +34,92 @@
   min-width: calc(100% - 1rem);
 }
 
-.album-cover {
+.info-container {
   display: flex;
+  justify-content: space-between;
+}
+
+.pic-container {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  min-width: 60%;
   margin-right: 0.5rem;
-  background-color: rgb(231, 231, 231);
   border-radius: 5px;
 }
 
-.cover-image {
+.profile-pic {
   border-radius: 5px;
-  height: 600px;
-  width: 600px;
+  height: 300px;
+  width: 300px;
   aspect-ratio: 1/1;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.553);
 }
 
-.track-names {
+.user-info {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: flex-start;
   border-left: 1px solid grey;
   padding-left: 1rem;
   min-width: 40%;
 }
 
-.track {
-    display: flex;
-    align-items: center;
-    width: 90%;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
-    transition: 0.2s;
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  max-width: 100%;
 }
 
-.track:hover {
-    background-color: rgb(216, 216, 216);
-    cursor: pointer;
+.card {
+  justify-self: center;
+  background: white;
+  width: 300px; /* */
+  margin: 0.5rem;
+  border: none;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  color: black;
+}
+
+.card-header {
+  height: 300px;
+  width: 100%;
+  font-size: 1.5rem;
+  padding: 0%;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.card-image {
+  display: block;
+  height: 300px;
+  width: 300px;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  object-position: center;
+  transition: 0.2s transform ease-in-out;
+}
+
+.card:hover > .card-header > .card-image {
+  transform: scale(1.025);
+}
+
+.card:hover {
+  cursor: pointer;
+}
+
+.card-body {
+  padding: 0 1rem;
 }
 
 h2,
@@ -101,6 +144,7 @@ h3,
   line-height: 1.5;
   margin-bottom: 0;
   margin-top: 0.5rem;
+  color: gray;
 }
 
 .vinyl-name,
@@ -109,7 +153,7 @@ h3,
   padding: 0%;
   margin: 0;
   padding-top: 0.2rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 0;
 }
 
 .vinyl-year,
@@ -141,17 +185,18 @@ h3,
   cursor: pointer;
 }
 
-@media screen and (max-width: 1300px) {
-
-    .track-names {
-        min-width: auto;
-    }
-
-    .track {
-        width: 90%;
-    }
-}
-
+.header-text.review-text {
+    color: black;
+    font-weight: 500;
+  }
+  
+  .header-text.review-stars {
+    margin-bottom: 0;
+  }
+  
+  .header-text.review-info {
+    margin-top: 0;
+  }
 
 @media screen and (max-width: 900px) {
   h2,
@@ -160,36 +205,39 @@ h3,
     padding: 0%;
   }
 
-  .page-header {
+  .welcome-header {
+    text-align: center;
+  }
+
+  .info-container {
     flex-direction: column;
   }
 
-  .track-names {
+  .user-info {
+    align-items: center;
     border-left: none;
+    padding-left: 0;
   }
 
-  .track {
-    width: 100%;
-    height: 3rem;
-    margin-bottom: 0.75rem;
+  .info-bottom {
+    display: none;
   }
 
-  .album-cover {
+  .pic-container {
     display: flex;
     margin-right: 0;
     padding-top: 0;
   }
 
-  .cover-image {
-    height: 75vw;
-    width: 75vw;
+  .profile-pic {
+    height: 300px;
+    width: 300px;
   }
 }
 
 @media screen and (max-width: 600px) {
-    .cover-image {
-        height: 95vw;
-        width: 95vw;
-      }
+  .profile-pic {
+    height: 250px;
+    width: 250px;
+  }
 }
-
