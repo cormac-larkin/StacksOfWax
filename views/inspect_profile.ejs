@@ -22,7 +22,10 @@
                     <div class="pic-container">
                         <img class="profile-pic" src="<%= userData.image_url || "https://cvhrma.org/wp-content/uploads/2015/07/default-profile-photo.jpg"%>" alt="" />
                         <% if (profileOwner) { %>
-                         <a href="#" class="edit-link">Change Profile Picture</a>
+                        <form method="POST" action="/users/update_pic">
+                            <input type="hidden" id="update-picture-input" name="pictureUrl" value="">
+                            <button class="rename-btn" id="update-picture-btn">Change Profile Picture</button>
+                        </form>
                         <% } %>
                     </div>
     
@@ -62,6 +65,11 @@
                     <hr />
                     <hr />
                     <div class="card-grid">
+
+                        <% if (collections.length == 0) { %>
+                            <h4 class="vinyl-year"> &nbsp;&nbsp; No collections to show...</h4>
+                        <% } %>
+
                         <% collections.forEach(collection => { %>
                             <a class="card" href="/collections?id=<%= collection.collection_id %>">
                                 <div class="card-body">
@@ -96,11 +104,11 @@
                                             <form method="POST" action="/collections/rename">
                                                 <input type="hidden" name="collectionId" value="<%= collection.collection_id %>">
                                                 <input type="hidden" id="rename-input" name="newName" value="">
-                                                <button class="rename-btn" id="rename-btn" type="submit">Rename</button>
+                                                <button class="rename-btn collection-rename-btn" id="rename-btn" type="submit">Rename</button>
                                             </form>
                                             <form method="POST" action="/collections/delete">
                                                 <input type="hidden" name="collectionId" value="<%= collection.collection_id %>">
-                                                <button class="delete-btn" id="delete-btn" type="submit">Delete</button>
+                                                <button class="delete-btn collection-delete-btn" id="delete-btn" type="submit">Delete</button>
                                             </form>
                                         </div>
                                     <% } %>
@@ -119,14 +127,26 @@
                  <% } %>
                  <hr/>
                  <hr/>
+
+                 <% if (reviews.length == 0) { %>
+                    <h4 class="vinyl-year">&nbsp;&nbsp; No reviews to show...</h4>
+                <% } %>
+
                  <% reviews.forEach(review => { %>
                     <div class="review-container">
                         <h3>'<%= review.title %>' | <a href="/collections?id=<%= review.collection_id %>"><%= review.name %></a></h3>
                         <h4 class="header-text review-stars"><%= review.rating %>/5 &#11088;</h4>
                         <h4 class="header-text review-info"><%= review.timestamp.toLocaleDateString() %></h4>
                         <p class="header-text review-text"><%= review.text %></p>
+                        <% if (profileOwner) { %>
+                            <hr/>
+                            <form method="POST" action="/reviews/delete">
+                                <input type="hidden" name="reviewId" value="<%= review.review_id %>">
+                                <button class="delete-btn review-delete-btn" id="review-delete-btn" type="submit">Delete</button>
+                            </form>
+                        <% } %>
                     </div>
-                   <hr />
+                   
                   <% }) %>
             </header>
         </main>

@@ -1,5 +1,6 @@
 const express = require("express");
 const db = require("../database/connection");
+const ensureAuthenticated = require("../middleware/ensureAuthenticated");
 
 const router = express.Router();
 
@@ -34,6 +35,19 @@ SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTI
 
     res.render("inspect_profile", { user: req.session.user, profileOwner, userData, reviews, likes, collections });
   });
+});
+
+router.post("/update_pic", ensureAuthenticated, (req, res) => {
+  
+  const {pictureUrl} = req.body;
+
+  // Update the Profile picture in the 'User' table
+  db.query("UPDATE user SET image_url = ? WHERE user_id = ?", [pictureUrl, req.session.user.id], (err, result) => {
+    if (err) throw err;
+    req.flash("success", "Profile picture changed successfully!");
+    res.redirect(`/users?id=${req.session.user.id}`);
+  });
+
 });
 
 module.exports = router;

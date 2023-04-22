@@ -44,6 +44,10 @@
 
 .review-container {
     padding-left: 1rem;
+    padding-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 .info-container {

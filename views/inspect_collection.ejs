@@ -114,9 +114,9 @@
                 <form class="review-form" method="POST" action="/reviews/add">
                     <input hidden name="collectionId" value="<%= collection.collection_id %>">
                     <label for="title">Title</label>
-                    <input type="text" class="review-title-input" id="title" name="title" maxlength="250" required>
+                    <input type="text" class="review-title-input" id="title" name="title" maxlength="250" placeholder="Sum it up in a few words" required>
                     <label for="review-content">Review</label>
-                    <textarea name="reviewContent" id="review-content" cols="30" rows="10" required></textarea>
+                    <textarea name="reviewContent" id="review-content" cols="30" rows="10" placeholder="Tell <%= collection.first_name %> what you think!" required></textarea>
                     <label for="rating">Rating (1-5)</label>
                    <input type="range" id="rating" name="rating" min="1" max="5" step="1">
                    <p id="rating-display">3/5 (Decent)</p>
