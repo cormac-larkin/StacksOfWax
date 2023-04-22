@@ -15,6 +15,9 @@
     <div class="flex-container">
         <main class="main">
             <header class="page-header">
+                <% if (messages.success) { %>
+                    <h3 class="success-message"><%= messages.success %></h3>
+                    <% } %>
                 <div class="info-container">
                     <div class="pic-container">
                         <img class="profile-pic" src="<%= userData.image_url || "https://cvhrma.org/wp-content/uploads/2015/07/default-profile-photo.jpg"%>" alt="" />
@@ -89,14 +92,17 @@
                                 <div class="card-footer">
                                     <% if (profileOwner) { %>
                                         <hr/>
-                                        <form method="POST" action="/collections/delete">
-                                            <input type="hidden" name="collectionId" value="<%= collection.collection_id %>">
-                                            <button class="delete-btn" id="delete-btn" type="submit">Delete</button>
-                                        </form>
-                                        <form method="POST" action="/collections/delete">
-                                            <input type="hidden" name="collectionId" value="<%= collection.collection_id %>">
-                                            <button class="rename-btn" id="rename-btn" type="submit">Rename</button>
-                                        </form>
+                                        <div class="btn-container">
+                                            <form method="POST" action="/collections/rename">
+                                                <input type="hidden" name="collectionId" value="<%= collection.collection_id %>">
+                                                <input type="hidden" id="rename-input" name="newName" value="">
+                                                <button class="rename-btn" id="rename-btn" type="submit">Rename</button>
+                                            </form>
+                                            <form method="POST" action="/collections/delete">
+                                                <input type="hidden" name="collectionId" value="<%= collection.collection_id %>">
+                                                <button class="delete-btn" id="delete-btn" type="submit">Delete</button>
+                                            </form>
+                                        </div>
                                     <% } %>
                                 </div>
                               </a>
@@ -129,4 +135,5 @@
     
 </body>
 <script src="./navbar.js"></script>
+<script src="./inspectProfile.js"></script>
 </html>

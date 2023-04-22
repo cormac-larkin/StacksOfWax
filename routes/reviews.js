@@ -14,6 +14,7 @@ router.post("/add", ensureAuthenticated, (req, res) => {
     [title, reviewContent, rating, new Date(), collectionId, reviewerId],
     (err, result) => {
       if (err) throw err;
+      req.flash("success", "Review added successfully!");
       res.redirect(`/collections?id=${collectionId}`);
     }
   );

@@ -55,9 +55,8 @@ router.get("/add", ensureAuthenticated, (req, res) => {
 });
 
 router.post("/add", ensureAuthenticated, (req, res) => {
-  // Get vinyl info from req.body
-  const { vinylName, genre, subGenre, artist, year, albumArt } = req.body;
   
+  const { vinylName, genre, subGenre, artist, year, albumArt } = req.body;
 
   // Get the track names
   let trackNames = [];
@@ -121,6 +120,7 @@ router.post("/add", ensureAuthenticated, (req, res) => {
                               }
                             );
                           });
+                          req.flash("success", "Vinyl added successfully!");
                           res.redirect("/vinyls/browse");
                         }
                       );

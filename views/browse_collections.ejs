@@ -20,6 +20,9 @@
           class="banner-image"
         />
         <header class="page-header">
+          <% if (messages.success) { %>
+            <h3 class="success-message"><%= messages.success %></h3>
+            <% } %>
           <hr />
           <hr />
           <div class="info-container">
