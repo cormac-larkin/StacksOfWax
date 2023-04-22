@@ -133,4 +133,29 @@ router.get("/", (req, res) => {
   );
 });
 
+router.post("/delete", ensureAuthenticated, (req, res) => {
+
+  const {collectionId} = req.body;
+
+  // Check that the request is coming from the owner of the collection
+  db.query("SELECT user_id FROM collection WHERE collection_id = ?", [collectionId], (err, result) => {
+    if (err) throw err;
+    const ownerId = result[0].user_id;
+
+    // Return 403 Forbidden response if the request is not coming from the collection's owner
+    if (req.session.user.id != ownerId) {
+      return res.status(403).send();
+    }
+
+    // Otherwise delete the collection and redirect back to the User's account page
+    db.query("DELETE FROM collection WHERE collection_id = ?", [collectionId], (err, result) => {
+      if(err) throw err;
+      res.redirect(`/users?id=${req.session.user.id}`);
+    });
+
+  });
+
+
+});
+
 module.exports = router;

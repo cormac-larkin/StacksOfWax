@@ -73,7 +73,6 @@ router.post("/add", ensureAuthenticated, (req, res) => {
     [artist],
     (err, result) => {
       if (err) throw err;
-      console.log(result);
       const artistId = result[0].artist_id;
 
       // Insert Vinyl and Link to Artist

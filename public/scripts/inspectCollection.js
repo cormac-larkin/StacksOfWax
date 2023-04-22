@@ -1,5 +1,6 @@
 const ratingSlider = document.getElementById("rating");
 const ratingDisplay = document.getElementById("rating-display");
+const submitButton = document.getElementById("submitButton");
 
 ratingSlider.addEventListener("change", () => {
   let description;
@@ -26,3 +27,12 @@ ratingSlider.addEventListener("change", () => {
   }
   ratingDisplay.innerText = `${currentRating}/5 (${description})`;
 });
+
+// When the Submit button is clicked, display a confirmation prompt before submitting the review
+if(submitButton) {
+  submitButton.addEventListener("click", (event) => {
+    if (!confirm("Are you sure you want submit this review?")) {
+      event.preventDefault();
+    }
+  })
+}

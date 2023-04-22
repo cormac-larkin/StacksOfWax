@@ -7,6 +7,13 @@ const submitBtn = document.getElementById("submitBtn");
 submitBtn.style.display = "none";
 submitBtn.disabled = true;
 
+// Display confirmation prompt when the submit button is clicked
+submitBtn.addEventListener("click", (event) => {
+  if(!confirm("Are you sure you want to add this vinyl to the catalogue?")) {
+    event.preventDefault();
+  }
+});
+
 // This listener dynamically adds the correct number of track input fields based on the user's input
 nextBtn.addEventListener("click", () => {
   const trackCount = trackCountInput.value;

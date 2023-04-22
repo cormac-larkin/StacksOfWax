@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 
   const sqlQuery = `\
 SELECT user_id, first_name, last_name, date_of_birth, join_date, last_login, image_url FROM user WHERE user_id = ?;\
-SELECT review.review_id, review.collection_id, title, review.text, rating, review.timestamp, collection.name FROM review INNER JOIN collection ON review.collection_id WHERE review.user_id = ? GROUP BY review.review_id;\
+SELECT review.review_id, review.collection_id, title, review.text, rating, review.timestamp, collection.name FROM review INNER JOIN collection ON review.collection_id = collection.collection_id WHERE review.user_id = ? GROUP BY review.review_id;\
 SELECT * FROM likes WHERE user_id = ?;\
 SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id WHERE collection.user_id = ? GROUP BY collection.collection_id;\
 `;

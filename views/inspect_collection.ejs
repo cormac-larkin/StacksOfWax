@@ -119,7 +119,7 @@
                     <label for="rating">Rating (1-5)</label>
                    <input type="range" id="rating" name="rating" min="1" max="5" step="1">
                    <p id="rating-display">3/5 (Decent)</p>
-                   <button class="btn" type="submit">Submit Review</button>
+                   <button class="btn" id="submitButton" type="submit">Submit Review</button>
                 </form>
             <% } else if (!user) { %>
                 <form class="review-form" method="POST" action="#">
