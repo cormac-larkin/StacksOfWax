@@ -18,7 +18,10 @@ router.post("/", async (req, res) => {
     "SELECT * FROM user WHERE email = ?",
     [email],
     async (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      } 
       if (result.length > 0) {
         req.flash("error", "That email address has already been registered!");
         return res.redirect("/register");
@@ -40,7 +43,10 @@ router.post("/", async (req, res) => {
         new Date(),
       ];
       db.query(query, queryValues, (err, result) => {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          return res.redirect("/error/500");
+        }
 
         // Redirect to /login with success message
         req.flash(

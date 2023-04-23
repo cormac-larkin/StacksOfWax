@@ -13,7 +13,10 @@ router.post("/add", ensureAuthenticated, (req, res) => {
     "INSERT INTO likes (user_id, collection_id) VALUES (?, ?)",
     [userId, collectionId],
     (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      }
       res.redirect(`/collections?id=${collectionId}`);
     }
   );
@@ -25,7 +28,10 @@ router.post("/delete", ensureAuthenticated, (req, res) => {
 
     // Delete the Like from the Database and redirect back to the collection page
     db.query("DELETE FROM likes WHERE user_id = ? AND collection_id = ?", [userId, collectionId], (err, result) => {
-        if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      } 
         res.redirect(`/collections?id=${collectionId}`);
     });
 });

@@ -21,11 +21,14 @@ SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTI
 `;
 
   db.query(sqlQuery, [userId, userId, userId, userId], (err, result) => {
-    if (err) throw err;
+    if (err) {
+      console.error(err);
+      return res.redirect("/error/500");
+    } 
     
     // Return 404 if no user found
     if (result[0].length === 0) {
-        return res.status(404).send();
+        return res.redirect("/error/404");
     }
 
     const userData = result[0][0];
@@ -43,7 +46,10 @@ router.post("/update_pic", ensureAuthenticated, (req, res) => {
 
   // Update the Profile picture in the 'User' table
   db.query("UPDATE user SET image_url = ? WHERE user_id = ?", [pictureUrl, req.session.user.id], (err, result) => {
-    if (err) throw err;
+    if (err) {
+      console.error(err);
+      return res.redirect("/error/500");
+    }
     req.flash("success", "Profile picture changed successfully!");
     res.redirect(`/users?id=${req.session.user.id}`);
   });

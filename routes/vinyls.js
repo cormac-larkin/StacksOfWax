@@ -22,17 +22,26 @@ router.get("/browse", (req, res) => {
 
     // Get all vinyl info
     db.query(sqlQuery, sqlValues, (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      } 
       const vinyls = result;
   
       // Get all genres for 'filter by genre' dropdown menu
       db.query("SELECT * FROM genre ORDER BY name ASC", (err, result) => {
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          return res.redirect("/error/500");
+        }
         const genres = result;
 
         // Get all artists for 'filter by artist' menu
         db.query("SELECT * FROM artist ORDER BY name ASC", (err, result) => {
-          if (err) throw err;
+          if (err) {
+            console.error(err);
+            return res.redirect("/error/500");
+          } 
           const artists = result;
   
           res.render("vinyls", { user: req.session.user, vinyls, artists, genres, filterName: queryParams.name || "All"});
@@ -43,11 +52,17 @@ router.get("/browse", (req, res) => {
 
 router.get("/add", ensureAuthenticated, (req, res) => {
   db.query("SELECT name FROM artist ORDER BY name ASC", (err, result) => {
-    if (err) throw err;
+    if (err) {
+      console.error(err);
+      return res.redirect("/error/500");
+    }
     const artists = result;
 
     db.query("SELECT name FROM genre ORDER BY name ASC", (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      }
       const genres = result;
       res.render("add_vinyl", { user: req.session.user, artists, genres });
     });
@@ -71,7 +86,10 @@ router.post("/add", ensureAuthenticated, (req, res) => {
     "SELECT artist_id FROM artist WHERE name = (?)",
     [artist],
     (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      }
       const artistId = result[0].artist_id;
 
       // Insert Vinyl and Link to Artist
@@ -79,7 +97,10 @@ router.post("/add", ensureAuthenticated, (req, res) => {
         "INSERT INTO vinyl (name, year, image_url, artist_id) VALUES (?, ?, ?, ?)",
         [vinylName, year, albumArt, artistId],
         (err, result) => {
-          if (err) throw err;
+          if (err) {
+            console.error(err);
+            return res.redirect("/error/500");
+          }
           const vinylId = result.insertId;
 
           // Get the ID of the Primary Genre and link it to the Vinyl (using vinyl_genre table)
@@ -87,28 +108,40 @@ router.post("/add", ensureAuthenticated, (req, res) => {
             "SELECT genre_id from genre WHERE name = (?)",
             [genre],
             (err, result) => {
-              if (err) throw err;
+              if (err) {
+                console.error(err);
+                return res.redirect("/error/500");
+              }
               const genreId = result[0].genre_id;
 
               db.query(
                 "INSERT INTO vinyl_genre (vinyl_id, genre_id) VALUES (?, ?)",
                 [vinylId, genreId],
                 (err, result) => {
-                  if (err) throw err;
+                  if (err) {
+                    console.error(err);
+                    return res.redirect("/error/500");
+                  }
 
                   // Get the ID of the Subgenre and link it to the Vinyl (using vinyl_genre table)
                   db.query(
                     "SELECT genre_id from genre WHERE name = (?)",
                     [subGenre],
                     (err, result) => {
-                      if (err) throw err;
+                      if (err) {
+                        console.error(err);
+                        return res.redirect("/error/500");
+                      }
                       const subGenreId = result[0].genre_id;
 
                       db.query(
                         "INSERT INTO vinyl_genre (vinyl_id, genre_id) VALUES (?, ?)",
                         [vinylId, subGenreId],
                         (err, result) => {
-                          if (err) throw err;
+                          if (err) {
+                            console.error(err);
+                            return res.redirect("/error/500");
+                          }
 
                           // Insert all the tracks and link to Vinyl
                           trackNames.forEach((track) => {
@@ -116,7 +149,10 @@ router.post("/add", ensureAuthenticated, (req, res) => {
                               "INSERT INTO track (name, vinyl_id) VALUES (?, ?)",
                               [track, vinylId],
                               (err, result) => {
-                                if (err) throw err;
+                                if (err) {
+                                  console.error(err);
+                                  return res.redirect("/error/500");
+                                }
                               }
                             );
                           });
@@ -147,7 +183,7 @@ router.get("/", (req, res) => {
 
     // Return a 404 error if no vinyl is found
     if (result.length === 0) {
-      return res.status(404).send();
+      return res.redirect("/error/404");
     }
     
     const tracks = result;

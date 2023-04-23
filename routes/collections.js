@@ -9,7 +9,7 @@ router.get("/browse", (req, res) => {
   const queryParams = req.query;
 
   // The default SQL query if no query params were given in the URL
-  let sqlQuery = "SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id";
+  let sqlQuery = "SELEC collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id";
   
   // If the URL contains query params for sorting the collections, use them to construct a new query
   if (Object.keys(queryParams).length > 0) {
@@ -19,7 +19,10 @@ router.get("/browse", (req, res) => {
   db.query(
     sqlQuery,
     (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      } 
       const collections = result;
       res.render("browse_collections", { user: req.session.user, collections });
     }
@@ -30,7 +33,10 @@ router.get("/create", ensureAuthenticated, (req, res) => {
   db.query(
     "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id GROUP BY vinyl.name",
     (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      }
       res.render("create_collection", {
         user: req.session.user,
         vinyls: result,
@@ -56,7 +62,10 @@ router.post("/create", ensureAuthenticated, (req, res) => {
     "INSERT INTO collection (name, timestamp, user_id) VALUES (?, ?, ?)",
     [collectionName, new Date(), userId],
     (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      }
       const collectionId = result.insertId;
 
       // Link all the Vinyls to the new collection (using collection_vinyl table)
@@ -65,7 +74,10 @@ router.post("/create", ensureAuthenticated, (req, res) => {
           "INSERT INTO collection_vinyl (collection_id, vinyl_id) VALUES (?, ?)",
           [collectionId, vinylId],
           (err, result) => {
-            if (err) throw err;
+            if (err) {
+              console.error(err);
+              return res.redirect("/error/500");
+            } 
           }
         );
       });
@@ -83,11 +95,14 @@ router.get("/", (req, res) => {
     "SELECT collection_id, name, user.user_id, user.first_name, user.last_name, collection.timestamp, image_url AS user_pic FROM collection INNER JOIN user ON collection.user_id = user.user_id WHERE collection_id = ?",
     [collectionId],
     (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      }
 
       // Return a 404 if no collection is found for that ID
       if (result.length === 0) {
-        return res.status(404).send();
+        return res.redirect("/error/404")
       }
 
       const collection = result[0];
@@ -97,12 +112,18 @@ router.get("/", (req, res) => {
         "SELECT vinyl.vinyl_id, vinyl.name AS vinyl_name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, year, image_url FROM vinyl INNER JOIN collection_vinyl ON vinyl.vinyl_id = collection_vinyl.vinyl_id INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON vinyl_genre.genre_id = genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id WHERE collection_id = ? GROUP BY vinyl.name;",
         [collectionId],
         (err, result) => {
-          if (err) throw err;
+          if (err) {
+            console.error(err);
+            return res.redirect("/error/500");
+          } 
           const vinyls = result;
 
           // Retrieve reviews for this collection
           db.query("SELECT user.user_id, first_name, last_name, title, rating, review.text, review.timestamp FROM review INNER JOIN user ON user.user_id = review.user_id WHERE collection_id = ?", [collectionId], (err, result) => {
-            if (err) throw err;
+            if (err) {
+              console.error(err);
+              return res.redirect("/error/500");
+            } 
             const reviews = result;
 
             let alreadyReviewed = false;
@@ -114,7 +135,10 @@ router.get("/", (req, res) => {
             
             // Retrieve the likes for this collection
             db.query("SELECT * FROM likes WHERE collection_id = ?", [collectionId], (err, result) => {
-              if (err) throw err;
+              if (err) {
+                console.error(err);
+                return res.redirect("/error/500");
+              } 
               const likes = result;
 
               // Check if the User viewing the page has already liked the collection (If yes, the 'Like' button will be disabled in template)
@@ -140,7 +164,10 @@ router.post("/rename", ensureAuthenticated, (req, res) => {
 
     // Check that the request is coming from the owner of the collection
     db.query("SELECT user_id FROM collection WHERE collection_id = ?", [collectionId], (err, result) => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      } 
       const ownerId = result[0].user_id;
   
       // Return '403 Forbidden' response if the request is not coming from the collection's owner
@@ -150,7 +177,10 @@ router.post("/rename", ensureAuthenticated, (req, res) => {
   
       // Otherwise rename the collection and redirect back to the User's account page
       db.query("UPDATE collection SET name = ? WHERE collection_id = ?", [newName, collectionId], (err, result) => {
-        if(err) throw err;
+        if (err) {
+          console.error(err);
+          return res.redirect("/error/500");
+        } 
         req.flash("success", "Collection renamed successfully!");
         res.redirect(`/users?id=${req.session.user.id}`);
       });
@@ -163,7 +193,10 @@ router.post("/delete", ensureAuthenticated, (req, res) => {
 
   // Check that the request is coming from the owner of the collection
   db.query("SELECT user_id FROM collection WHERE collection_id = ?", [collectionId], (err, result) => {
-    if (err) throw err;
+    if (err) {
+      console.error(err);
+      return res.redirect("/error/500");
+    } 
     const ownerId = result[0].user_id;
 
     // Return '403 Forbidden' response if the request is not coming from the collection's owner
@@ -173,14 +206,15 @@ router.post("/delete", ensureAuthenticated, (req, res) => {
 
     // Otherwise delete the collection and redirect back to the User's account page
     db.query("DELETE FROM collection WHERE collection_id = ?", [collectionId], (err, result) => {
-      if(err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      }
       req.flash("success", "Collection deleted successfully!");
       res.redirect(`/users?id=${req.session.user.id}`);
     });
 
   });
-
-
 });
 
 module.exports = router;

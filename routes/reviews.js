@@ -26,7 +26,10 @@ router.post("/delete", ensureAuthenticated, (req, res) => {
 
   // Check that the request is coming from the author of the review
   db.query("SELECT user_id FROM review WHERE review_id = ?", [reviewId], (err, result) => {
-    if (err) throw err;
+    if (err) {
+      console.error(err);
+      return res.redirect("/error/500");
+    } 
     const ownerId = result[0].user_id;
 
     // Return '403 Forbidden' response if the request is not coming from the review's author
@@ -36,13 +39,14 @@ router.post("/delete", ensureAuthenticated, (req, res) => {
 
     // Otherwise delete the review and redirect back to the User's account page
     db.query("DELETE FROM review WHERE review_id = ?", [reviewId], (err, result) => {
-      if(err) throw err;
+      if (err) {
+        console.error(err);
+        return res.redirect("/error/500");
+      }
       req.flash("success", "Review deleted successfully!");
       res.redirect(`/users?id=${req.session.user.id}`);
     });
-
   });
-
 });
 
 module.exports = router;

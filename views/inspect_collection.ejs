@@ -29,7 +29,7 @@
             <div class="left-info">
                 <h2 class="welcome-header"><%= collection.name %></h2>
               <h4 class="header-text">
-                By <u><%= collection.first_name %> <%= collection.last_name %></u>
+                By <a href="/users?id=<%= collection.user_id %>"><u><%= collection.first_name %> <%= collection.last_name %></u></a>
               </h4>
              
               <h4 class="header-text"><%= vinyls.length %> Vinyls</h4>

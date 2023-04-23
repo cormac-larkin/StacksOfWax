@@ -13,6 +13,7 @@ const collectionRoutes = require("./routes/collections");
 const reviewRoutes = require("./routes/reviews");
 const likeRoutes = require("./routes/likes");
 const userRoutes = require("./routes/users");
+const errorRoutes = require("./routes/errors");
 
 // Configure Express
 const app = express();
@@ -42,6 +43,7 @@ app.use("/collections", collectionRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/likes", likeRoutes);
 app.use("/users", userRoutes);
+app.use("/error", errorRoutes);
 
 app.get("/", ensureNotAuthenticated, (req, res) => {
   res.render("landing");
