@@ -94,7 +94,7 @@ router.post("/edit", ensureAuthenticated, (req, res) => {
       }
 
       // Otherwise update the review and redirect back to the User's account page
-      db.query("UPDATE review SET title = ?, text = ?, rating = ?, timestamp = ? WHERE review_id = ?", [newTitle, newText, newRating, new Date(), reviewId], (err, result) => {
+      db.query("UPDATE review SET title = ?, text = ?, rating = ? WHERE review_id = ?", [newTitle, newText, newRating, reviewId], (err, result) => {
         if (err) {
           console.error(err);
           return res.redirect("/error/500");

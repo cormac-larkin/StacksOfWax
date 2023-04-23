@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="globals.css" />
+    <link href="https://fonts.cdnfonts.com/css/norse" rel="stylesheet">
     <link rel="stylesheet" href="navbar.css" />
     <link rel="stylesheet" href="footer.css" />
     <link rel="stylesheet" href="index.css" />
@@ -18,7 +19,10 @@
         <img src="https://images.unsplash.com/photo-1662354333661-1c18107484b9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="" class="banner-image">
         <header class="page-header">
           <% if (user) { %>
+          <div class="profile-link-container">
           <h2 class="welcome-header"><%= user.firstName %>'s Dashboard</h2>
+          <button class="btn"> <a href="/users?id=<%= user.id %>">My Profile</a></button>
+          </div>
           <hr/>
           <% } else { %>
           <h2 class="welcome-header">Welcome To Stacks Of Wax!</h2>
@@ -112,7 +116,7 @@
                 />
               </div>
               <div class="card-body">
-                Check out our member profiles and see what people are sharing!
+                Check out our full catalogue of vinyls and discover something new!
               </div>
               <div class="card-footer">
                 <button class="btn"><a href="/vinyls/browse">Browse Vinyls</a></button>
@@ -130,7 +134,7 @@
                 From Bob Marley to Black Sabbath, you'll find them all here!
               </div>
               <div class="card-footer">
-                <button class="btn">Browse Artists</button>
+                <button class="btn"> <a href="/vinyls/browse">Browse Artists</a></button>
               </div>
             </article>
             <article class="card">
@@ -162,7 +166,7 @@
                 we guarantee you'll find it here!
               </div>
               <div class="card-footer">
-                <button class="btn">Browse Genres</button>
+                <button class="btn"><a href="/vinyls/browse">Browse Genres</a></button>
               </div>
             </article>
           </div>

@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../globals.css" />
+    <link href="https://fonts.cdnfonts.com/css/norse" rel="stylesheet">
     <link rel="stylesheet" href="../navbar.css" />
     <link rel="stylesheet" href="../footer.css" />
     <link rel="stylesheet" href="../browse_collections.css" />
@@ -29,7 +30,10 @@
           <div class="info-container">
             <div class="info-left">
               <h2 class="welcome-header">Browse Collections</h2>
-              <p class="header-text">Click on a collection for more information!</p>
+              <p class="header-text"> <u><b>Tip:</b></u> Click on a collection for more details!</p>
+              <% if (user) { %>
+                <button class="btn"><a href="/collections/create">Create Collection</a></button>
+              <% } %>
             </div>
             <div class="info-right">
               <form method="GET" action="/collections/browse" class="filter-form">
