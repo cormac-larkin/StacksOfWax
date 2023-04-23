@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../globals.css">
+    <link rel="stylesheet" href="../navbar.css">
+    <link rel="stylesheet" href="../footer.css">
+    <link rel="stylesheet" href="../edit_review.css">
+    <title>Edit Review</title>
+</head>
+<body>
+    <%- include("./partials/navbar") %>
+    <div class="flex-container">
+        <main class="main">
+            <header class="page-header">
+<section class="edit-review">
+    <h2>Edit Your Review</h2>
+    <form class="review-form" method="POST" action="/reviews/edit">
+        <input hidden name="reviewId" value="<%= reviewData.review_id %>">
+        <label for="title">Title</label>
+        <input type="text" class="review-title-input" id="title" name="newTitle" maxlength="250" value="<%= reviewData.title %>" required>
+        <label for="review-content">Review</label>
+        <textarea name="newText" id="review-content" cols="30" rows="10" required><%= reviewData.text %></textarea>
+        <label for="rating">Rating (1-5)</label>
+       <input type="range" id="rating" name="newRating" min="1" max="5" step="1">
+       <p id="rating-display">3/5 (Decent)</p>
+       <button class="btn" id="submitButton" type="submit">Submit Review</button>
+    </form>
+</section>
+</header>
+</main>
+</div>
+    <%- include("./partials/footer") %>
+</body>
+<script src="../navbar.js"></script>
+<script src="../inspectCollection.js"></script>
+</html>

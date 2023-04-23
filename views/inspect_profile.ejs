@@ -141,10 +141,16 @@
                         <p class="header-text review-text"><%= review.text %></p>
                         <% if (profileOwner) { %>
                             <hr/>
+                            <div class="btn-container">
+                            <form method="GET" action="/reviews/edit">
+                                <input type="hidden" name="id" value="<%= review.review_id %>">
+                                <button class="rename-btn" id="rename-btn" type="submit">Edit</button>
+                            </form>
                             <form method="POST" action="/reviews/delete">
                                 <input type="hidden" name="reviewId" value="<%= review.review_id %>">
                                 <button class="delete-btn review-delete-btn" id="review-delete-btn" type="submit">Delete</button>
                             </form>
+                        </div>
                         <% } %>
                     </div>
                    
