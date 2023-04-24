@@ -46,6 +46,7 @@ router.get("/create", ensureAuthenticated, (req, res) => {
 });
 
 router.post("/create", ensureAuthenticated, (req, res) => {
+  
   const userId = req.session.user.id;
   const collectionName = req.body.collectionName;
 

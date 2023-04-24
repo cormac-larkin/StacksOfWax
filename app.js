@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const flash = require("express-flash");
 const session = require("express-session");
@@ -25,10 +24,12 @@ app.use(express.static("public/scripts"));
 app.use(express.urlencoded({ extended: false }));
 
 // Configure Sessions/Cookies
+const oneDay = 1000 * 60 * 60 * 24
+
 app.use(
   session({
-    cookie: { maxAge: 1000 * 60 * 60 * 24 },
-    secret: process.env.SESSION_SECRET,
+    cookie: { maxAge: oneDay },
+    secret: "23df4jfs8hd75a3",
     resave: false,
     saveUninitialized: false
   })
