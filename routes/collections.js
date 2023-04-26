@@ -9,11 +9,21 @@ router.get("/browse", (req, res) => {
   const queryParams = req.query;
 
   // The default SQL query if no query params were given in the URL
-  let sqlQuery = "SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id";
+  let sqlQuery =
+   `SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes,
+    COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection
+    LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id
+    LEFT JOIN likes ON collection.collection_id = likes.collection_id
+    GROUP BY collection.collection_id`;
   
   // If the URL contains query params for sorting the collections, use them to construct a new query
   if (Object.keys(queryParams).length > 0) {
-    sqlQuery = `SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes, COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id ORDER BY ${queryParams.field} ${queryParams.order}`;
+    sqlQuery = 
+    `SELECT collection.collection_id, collection.name AS collection_name, COUNT(DISTINCT likes.like_id) AS likes,
+    COUNT(DISTINCT review.review_id) AS reviews, ROUND(AVG(review.rating), 1) AS rating, first_name, last_name FROM collection 
+    LEFT JOIN user ON collection.user_id = user.user_id LEFT JOIN review ON review.collection_id = collection.collection_id 
+    LEFT JOIN likes ON collection.collection_id = likes.collection_id GROUP BY collection.collection_id 
+    ORDER BY ${queryParams.field} ${queryParams.order}`;
   }
 
   db.query(
@@ -31,7 +41,12 @@ router.get("/browse", (req, res) => {
 
 router.get("/create", ensureAuthenticated, (req, res) => {
   db.query(
-    "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id GROUP BY vinyl.name",
+    `SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, 
+    artist.name AS artist, image_url, year FROM vinyl 
+    INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id 
+    INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id 
+    INNER JOIN artist ON vinyl.artist_id = artist.artist_id 
+    GROUP BY vinyl.name`,
     (err, result) => {
       if (err) {
         console.error(err);
@@ -93,7 +108,9 @@ router.get("/", (req, res) => {
 
   // Get the collection info
   db.query(
-    "SELECT collection_id, name, user.user_id, user.first_name, user.last_name, collection.timestamp, image_url AS user_pic FROM collection INNER JOIN user ON collection.user_id = user.user_id WHERE collection_id = ?",
+    `SELECT collection_id, name, user.user_id, user.first_name, user.last_name, collection.timestamp, image_url AS user_pic FROM collection 
+    INNER JOIN user ON collection.user_id = user.user_id
+    WHERE collection_id = ?`,
     [collectionId],
     (err, result) => {
       if (err) {
@@ -110,7 +127,12 @@ router.get("/", (req, res) => {
 
       // Retrieve data for vinyls in this collection
       db.query(
-        "SELECT vinyl.vinyl_id, vinyl.name AS vinyl_name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, year, image_url FROM vinyl INNER JOIN collection_vinyl ON vinyl.vinyl_id = collection_vinyl.vinyl_id INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON vinyl_genre.genre_id = genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id WHERE collection_id = ? GROUP BY vinyl.name;",
+        `SELECT vinyl.vinyl_id, vinyl.name AS vinyl_name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, year, image_url FROM vinyl
+        INNER JOIN collection_vinyl ON vinyl.vinyl_id = collection_vinyl.vinyl_id
+        INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id 
+        INNER JOIN genre ON vinyl_genre.genre_id = genre.genre_id 
+        INNER JOIN artist ON vinyl.artist_id = artist.artist_id
+        WHERE collection_id = ? GROUP BY vinyl.name;`,
         [collectionId],
         (err, result) => {
           if (err) {
@@ -120,7 +142,11 @@ router.get("/", (req, res) => {
           const vinyls = result;
 
           // Retrieve reviews for this collection
-          db.query("SELECT user.user_id, first_name, last_name, title, rating, review.text, review.timestamp FROM review INNER JOIN user ON user.user_id = review.user_id WHERE collection_id = ?", [collectionId], (err, result) => {
+          db.query(
+            `SELECT user.user_id, first_name, last_name, title, rating, review.text, review.timestamp FROM review
+            INNER JOIN user ON user.user_id = review.user_id
+            WHERE collection_id = ?`,
+            [collectionId], (err, result) => {
             if (err) {
               console.error(err);
               return res.redirect("/error/500");

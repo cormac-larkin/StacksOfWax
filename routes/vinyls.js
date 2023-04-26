@@ -11,13 +11,25 @@ router.get("/browse", (req, res) => {
 
 
   // The default SQL query if no filter was provided in the query params
-  let sqlQuery = "SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id GROUP BY vinyl.name"
+  let sqlQuery = 
+  `SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, 
+  artist.name AS artist, image_url, year FROM vinyl 
+  INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id 
+  INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id 
+  INNER JOIN artist ON vinyl.artist_id = artist.artist_id 
+  GROUP BY vinyl.name`
 
-  // If query params were given, use them to construct a new query
+  // If query params were given, use them to construct a new filtered query
   if (Object.keys(queryParams).length > 0) {
     sqlValues.push(queryParams.field.concat(".name"));
     sqlValues.push(queryParams.name);
-    sqlQuery = `SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, image_url, year FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON vinyl.artist_id = artist.artist_id WHERE ?? = ? GROUP BY vinyl.name`
+    sqlQuery = 
+    `SELECT vinyl.vinyl_id, vinyl.name, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, 
+    artist.name AS artist, image_url, year FROM vinyl 
+    INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id 
+    INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id 
+    INNER JOIN artist ON vinyl.artist_id = artist.artist_id WHERE ?? = ? 
+    GROUP BY vinyl.name`
   }
 
     // Get all vinyl info
@@ -175,7 +187,14 @@ router.post("/add", ensureAuthenticated, (req, res) => {
 router.get("/", (req, res) => {
 
   const vinylId = req.query.id;
-  const sqlQuery = "SELECT track.name, `year`, image_url, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, artist.name AS artist, artist.artist_id, vinyl.name AS vinyl FROM vinyl INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id INNER JOIN artist ON artist.artist_id = vinyl.artist_id INNER JOIN track ON vinyl.vinyl_id = track.vinyl_id WHERE vinyl.vinyl_id = ? GROUP BY track.name";
+  const sqlQuery = 
+  `SELECT track.name, \`year\`, image_url, GROUP_CONCAT(genre.name SEPARATOR '/') AS genre, 
+  artist.name AS artist, artist.artist_id, vinyl.name AS vinyl FROM vinyl 
+  INNER JOIN vinyl_genre ON vinyl_genre.vinyl_id = vinyl.vinyl_id 
+  INNER JOIN genre ON genre.genre_id = vinyl_genre.genre_id 
+  INNER JOIN artist ON artist.artist_id = vinyl.artist_id 
+  INNER JOIN track ON vinyl.vinyl_id = track.vinyl_id WHERE vinyl.vinyl_id = ? 
+  GROUP BY track.name`;
 
   db.query(sqlQuery, [vinylId], (err, result) => {
 
